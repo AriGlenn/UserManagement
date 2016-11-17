@@ -2,8 +2,9 @@
 
 ## Challenge
 For this challenge, you need to create a user management system.
-That is, a program that allows a user to register an account,
-login with a username and password, and logout.
+That is, a program that allows users to register an account,
+login with a username and password, and logout. Your application
+needs to be able to register multiple users.
 
 ## Extra Challenges
 The following suggestions are extra challenges to make your program
@@ -35,7 +36,7 @@ with open('numbers.txt', 'w') as myFile:
 
 #### Open a file for reading
 ```python
-with open('someFile.txt', 'w') as myFile: #someFile.txt must exist
+with open('someFile.txt', 'r') as myFile: #someFile.txt must exist
 
     for x in myFile.readlines():
         print(x)
@@ -70,3 +71,8 @@ while not exit:
     if s == '4':
         exit = True
 ```
+
+## Grading
+Please review the rubrics for grading. When you are finished,
+modify this README file with entirely your own content. Be sure
+to use markdown to make the README professionally formatted.
