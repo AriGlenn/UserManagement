@@ -1,6 +1,7 @@
 
 
 import smtplib
+import os.path
 
 server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
 server.ehlo()
@@ -15,30 +16,24 @@ Acc:
 	Pass: Recovery36
 """
 
-"""
-add check to make sure accounts.txt has been creqated before Login
+RegisterRun = False
 
+
+"""
 add readme myFile
 
 add logout myFile
 
-add diff email
-
-add diff message
-
 add encrypted password
-
-add functionality of diff accounts
 
 add text file to store email
 
 add string substitution template 
 
-add dissmiss to reset question
-
 add bio (extra info)
 
 """
+
 
 def Register():
 	print('Username and Passwords must only contain letters and number')
@@ -50,9 +45,12 @@ def Register():
 		print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
 	with open('accounts.txt', 'a') as myFile:
 		myFile.write(str(Username) + ' ' + str(Password) + '\n')
-	return Password, Username
+	with open('accounts.txt', 'a') as myFile:
+		myFile.write('True' + '\n')
 
-def Login(Password, Username):
+
+def Login():
+	
 	loggedin = False
 	UsernameLogin = input('Enter a Username: ')
 	PasswordLogin = input('Enter a Password: ')
@@ -88,12 +86,17 @@ while not exit:
 
 	if selection == '1':
 		#Register
-		Password, Username = Register()
+		Register()
 
 	elif selection == '2':
 		#Login
- 		Login(Password, Username)
-	
+		accounts = open('accounts.txt', 'r')
+		accounts = accounts.read()
+		accounts = accounts.split()
+		for x in range(int(len(accounts)/2)):
+			if accounts[x] == 'True':
+				Login()
+		
 	elif selection == '3':
 		#Log Out
 		LogOut()
