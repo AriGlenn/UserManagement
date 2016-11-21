@@ -22,7 +22,7 @@ RegisterRun = False
 """
 add readme myFile
 
-add logout myFile
+add logout file
 
 add encrypted password
 
@@ -32,13 +32,15 @@ add string substitution template
 
 add bio (extra info)
 
+fix bugs on line 70 and 79
+
 """
 
 
 def Register():
 	print('Username and Passwords must only contain letters and number')
-	Username = input('Create a Username: ')
-	Password = input('Create a Password: ')
+	Register.Username = input('Create a Username: ')
+	Register.Password = input('Create a Password: ')
 	CheckPassword = input('Please re-type your Password: ')
 	receiver = input ('Please enter a recovery email: ')
 	if CheckPassword != Password:
@@ -47,6 +49,7 @@ def Register():
 		myFile.write(str(Username) + ' ' + str(Password) + '\n')
 	with open('accounts.txt', 'a') as myFile:
 		myFile.write('True' + '\n')
+
 
 
 def Login():
@@ -67,13 +70,15 @@ def Login():
 		reset = input('Forgot Password? Press 1 to reset: ')
 		if reset == '1':
 			receiver = input('Enter your recovery email: ')
-			message = 'Your Username is ' + Username + '\n' + 'Your Password is ' + Password
+#			message = 'Your Username is ' + Register.Username + '\n' + 'Your Password is ' + Register.Password
 			server.sendmail('InfoRecovery.User@gmail.com', receiver, message)
 			print('You will be receiveing an email shortly...')
 
 
 def LogOut():
-	pass
+
+		loggedin = False
+#		print(userLogOut + ' has logged out')
 
 
 exit  = False
@@ -99,7 +104,8 @@ while not exit:
 		
 	elif selection == '3':
 		#Log Out
-		LogOut()
+		if loggedin == True:
+			LogOut()
 
 
 	elif selection == '4':
