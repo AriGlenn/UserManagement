@@ -1,14 +1,26 @@
 
 
 
-
-
-
 def Register():
-	pass
+	print('Username and Passwords must only contain letters and number')
+	Username = input('Create a Username: ')
+	Password = input('Create a Password: ')
+	CheckPassword = input('Please re-type your Password: ')
+
+	if CheckPassword != Password:
+		print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
+
+	with open('accounts.txt', 'w') as myFile:
+		myFile.write(str(Username) + ' ' + str(Password) + '\n')
+
+
+
+
 
 def Login():
-	pass
+	UsernameLogin = input('Enter a Username: ')
+	PasswordLogin = input('Enter a Password: ')
+
 
 def LogOut():
 	pass
