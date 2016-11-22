@@ -27,28 +27,22 @@ with open('accounts.txt', 'r') as myFile:
 			accounts.append(info[i:i+5])
 	print(accounts)
 
+loggedin = False
+
+
 """
 -add readme File
-
--add LogOut
-
--bug of not sending email (not registering username and password)
+-add LogOut where you can only log out once logged in
+-add func of if someone wans to recover account, but the account does not exist
+-add username is already taken
 
 EXTRA:
-
-	add if recover account does not exist
-
-	add username is already taken
-
 	add encrypted password
-
 	add Security questions
 		#Please enter the name of your first pet
-
 """
 
-
-def Register():
+def askQuestion():
 	print('Username and Passwords must only contain letters and number')
 	Username = input('Create a Username: ')
 	Password = input('Create a Password: ')
@@ -58,6 +52,21 @@ def Register():
 	receiver = input ('Please enter a recovery email: ')
 	birthday = input('Please enter the year you were born: ')
 	petname = input('Please enter your first pet\'s name: ')
+	
+	if Username == '' or Password == '' or receiver == '' or birthday == '' or petname == '':
+		print('Error: You have left one of the questions blank')
+		askQuestion()
+	try:
+		int(birthday)
+	except ValueError:
+		print('Error: You typed in a word instead of a number for your birthday')
+		askQuestion()
+	else:
+		return Username, Password, receiver, birthday, petname
+
+def Register():
+
+	Username, Password, receiver, birthday, petname = askQuestion()
 	calculatedAge = 2016 - int(birthday)
 	with open('accounts.txt', 'a') as myFile:
 		myFile.write(str(Username) + ',' + str(Password) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(receiver) + ',')
@@ -69,7 +78,6 @@ def Register():
 
 def Login():
 	emailFound = False
-	loggedin = False
 	UsernameLogin = input('Enter a Username: ')
 	PasswordLogin = input('Enter a Password: ')
 	for account in accounts:
@@ -77,7 +85,7 @@ def Login():
 			loggedin = True
 			age = account[2]
 			petname = account[3]
-	if loggedin == True:
+	if loggedin:
 		print('Welcome user ' + UsernameLogin + '!')
 		print('You are ' + age + ' years old.')
 		print('You\'re first pet\'s name is ' + petname + '.')
@@ -93,12 +101,15 @@ def Login():
 					message = 'Hello ' + resetUsername + '\n' + 'Your Password is ' + resetPassword
 					server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
 			print('You will be receiveing an email shortly...')
+	return UsernameLogin
 
 
-def LogOut():
+
+def LogOut(UsernameLogin):
 
 	loggedin = False
-	print(Username + ' has logged out')
+	print(UsernameLogin + ' has logged out --  ')
+#	print(Username + ' has logged out')
 
 
 exit  = False
@@ -115,13 +126,11 @@ while not exit:
 
 	elif selection == '2':
 		#Login
-
-		Login()
+		UsernameLogin = Login()
 		
 	elif selection == '3':
 		#Log Out
-		if loggedin == True:
-			LogOut()
+		LogOut(UsernameLogin)
 
 
 	elif selection == '4':
