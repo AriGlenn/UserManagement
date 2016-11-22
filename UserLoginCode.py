@@ -31,8 +31,8 @@ loggedin = False
 
 
 """
+-password is blank error
 -add readme File
--add LogOut where you can only log out once logged in
 -add func of if someone wans to recover account, but the account does not exist
 -add username is already taken
 
@@ -71,10 +71,6 @@ def Register():
 	with open('accounts.txt', 'a') as myFile:
 		myFile.write(str(Username) + ',' + str(Password) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(receiver) + ',')
 	
-	
-
-
-
 
 def Login():
 	emailFound = False
@@ -101,7 +97,7 @@ def Login():
 					message = 'Hello ' + resetUsername + '\n' + 'Your Password is ' + resetPassword
 					server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
 			print('You will be receiveing an email shortly...')
-	return UsernameLogin
+	return UsernameLogin, loggedin
 
 
 
@@ -109,15 +105,17 @@ def LogOut(UsernameLogin):
 
 	loggedin = False
 	print(UsernameLogin + ' has logged out --  ')
-#	print(Username + ' has logged out')
 
-
+	return loggedin
 exit  = False
 while not exit:
 	print('1. Register')
 	print('2. Login')
-	print('3. Log out')
-	print('4. Exit')
+	if loggedin:
+		print('3. Log out')
+		print('4. Exit')	
+	else:
+		print('3. Exit')
 	selection = input('Input: ')
 
 	if selection == '1':
@@ -126,13 +124,15 @@ while not exit:
 
 	elif selection == '2':
 		#Login
-		UsernameLogin = Login()
-		
-	elif selection == '3':
-		#Log Out
-		LogOut(UsernameLogin)
+		UsernameLogin,loggedin = Login()
+	if loggedin:
+		if selection == '3':
+			#Log Out
+			loggedin = LogOut(UsernameLogin)
 
-
-	elif selection == '4':
-		exit = True
+		elif selection == '4':
+			exit = True
+	else: 
+		if selection == '3':
+			exit = True
 
