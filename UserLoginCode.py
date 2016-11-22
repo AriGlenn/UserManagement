@@ -3,6 +3,7 @@
 import smtplib
 import os.path
 import os
+os.system('clear')
 
 server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
 server.ehlo()
@@ -16,8 +17,9 @@ Acc:
 	User: InfoRecovery.User@gmail.com
 	Pass: Recovery36
 """
-
+loggedin = False
 RegisterRun = False
+emailFound = False
 
 accounts = []
 with open('accounts.txt', 'r') as myFile:
@@ -26,18 +28,15 @@ with open('accounts.txt', 'r') as myFile:
 	for i in range(len(info)):
 		if i%5 == 0:
 			accounts.append(info[i:i+5])
-	print(accounts)
 
-loggedin = False
 
 
 """
--password is blank error
+-bug of not being able to login until the program is quit and re-run 
 -add readme File
--add func of if someone wans to recover account, but the account does not exist
--add username is already taken
 -remove txt file from git
 -make sure txt is made before login
+-get rid of login option after you log in
 
 EXTRA:
 	add encrypted password
@@ -89,11 +88,11 @@ def Login():
 			loggedin = True
 			age = account[2]
 			petname = account[3]
-	if loggedin:
-		print('Welcome user ' + UsernameLogin + '!')
-		print('You are ' + age + ' years old.')
-		print('You\'re first pet\'s name is ' + petname + '.')
-	else:
+			print('Welcome user ' + UsernameLogin + '!')
+			print('You are ' + age + ' years old.')
+			print('You\'re first pet\'s name is ' + petname + '.')
+	global loggedin
+	if not loggedin:
 		print('Incorrect password or username: Please Try Again')
 		reset = input('Forgot Password? Press 1 to reset: ')
 		if reset == '1':
@@ -104,7 +103,10 @@ def Login():
 					resetEmail = account[4]
 					message = 'Hello ' + resetUsername + '\n' + 'Your Password is ' + resetPassword
 					server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
-			print('You will be receiveing an email shortly...')
+					print('You will be receiveing an email shortly...')
+					emailFound = True
+			if emailFound == False:
+				print('The username you typed in does not exist.')
 	return UsernameLogin, loggedin
 
 
@@ -117,31 +119,42 @@ def LogOut(UsernameLogin):
 	return loggedin
 exit  = False
 while not exit:
-	os.system('clear')
 	print('1. Register')
-	print('2. Login')
 	if loggedin:
-		print('3. Log out')
-		print('4. Exit')	
+		print('2. Log out')
+		print('3. Exit')	
 	else:
+		print('2. Login')
 		print('3. Exit')
 	selection = input('Input: ')
 
 	if selection == '1':
 		#Register
+		os.system('clear')
 		Register()
 
-	elif selection == '2':
-		#Login
-		UsernameLogin,loggedin = Login()
+
 	if loggedin:
-		if selection == '3':
+		if selection == '2':
 			#Log Out
+			os.system('clear')
+
 			loggedin = LogOut(UsernameLogin)
 
-		elif selection == '4':
+		elif selection == '3':
+			os.system('clear')
+
 			exit = True
+
 	else: 
-		if selection == '3':
+
+		if selection == '2':
+		#Login
+			UsernameLogin,loggedin = Login()
+
+		elif selection == '3':
+			os.system('clear')
+
 			exit = True
+
 
