@@ -12,7 +12,8 @@ with open('accounts.txt', 'a') as myFile:
 ```
 
 #### Create a main menu
-```exit  = False
+```
+exit  = False
 while not exit:
 	print('1. Register')
 	print('2. Login')
@@ -31,7 +32,7 @@ server.starttls()
 server.ehlo()
 server.login('InfoRecovery.User@gmail.com','Recovery36')
 
-#If the account needs to be recovered, and to send the email:
+#If the account needs to be recovered, and to send the email
 receiver = input('Enter your recovery email: ')
 message = 'Your Username is ' + Username + '\n' + 'Your Password is ' + Password
 server.sendmail('InfoRecovery.User@gmail.com', receiver, message)
