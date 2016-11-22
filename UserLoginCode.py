@@ -18,17 +18,29 @@ Acc:
 
 RegisterRun = False
 
+accounts = []
+with open('accounts.txt', 'r') as myFile:
+	info = myFile.read()
+	info = info.split(',')
+	for i in range(len(info)):
+		if i%5 == 0:
+			accounts.append(info[i:i+5])
+	print(accounts)
 
 """
 -add readme File
 
--bug of not registering the sign in
+-add LogOut
+
+-bug of not sending email (not registering username and password)
 
 EXTRA:
 
-	add encrypted password
+	add if recover account does not exist
 
-	add age , pets name
+	add username is already taken
+
+	add encrypted password
 
 	add Security questions
 		#Please enter the name of your first pet
@@ -45,49 +57,41 @@ def Register():
 		print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
 	receiver = input ('Please enter a recovery email: ')
 	birthday = input('Please enter the year you were born: ')
-	petname = input('Please enter your first pet\'s name : ')
+	petname = input('Please enter your first pet\'s name: ')
 	calculatedAge = 2016 - int(birthday)
-	
 	with open('accounts.txt', 'a') as myFile:
-		myFile.write(str(Username) + ' ' + str(Password) + ' ' + str(calculatedAge) + ' ' + str(petname) + '\n')
-	with open('accounts.txt', 'a') as myFile:
-		myFile.write('True' + '\n')
-	return Username, Password
+		myFile.write(str(Username) + ',' + str(Password) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(receiver) + ',')
 	
 	
 
 
 
 
-def Login(Username, Password):
-	
+def Login():
+	emailFound = False
 	loggedin = False
 	UsernameLogin = input('Enter a Username: ')
 	PasswordLogin = input('Enter a Password: ')
-	accounts = open('accounts.txt', 'r')
-	accounts = accounts.read()
-	accounts = accounts.split()
-	for x in range(int(len(accounts))):
-		if accounts[x] == UsernameLogin and accounts[x+1] == PasswordLogin:
+	for account in accounts:
+		if account[0] == UsernameLogin and account[1] == PasswordLogin:
 			loggedin = True
-			age = accounts[x+2]
-			petname = accounts[x+3]
-
+			age = account[2]
+			petname = account[3]
 	if loggedin == True:
 		print('Welcome user ' + UsernameLogin + '!')
 		print('You are ' + age + ' years old.')
 		print('You\'re first pet\'s name is ' + petname + '.')
-
-
-
 	else:
 		print('Incorrect password or username: Please Try Again')
 		reset = input('Forgot Password? Press 1 to reset: ')
 		if reset == '1':
-			receiver = input('Enter your recovery email: ')
-			message = 'This is a recovery email'
-			message = 'Your Username is ' + Username + '\n' + 'Your Password is ' + Password
-			server.sendmail('InfoRecovery.User@gmail.com', receiver, message)
+			resetUsername = input('Enter your username associated with the account you would like to recovery: ')
+			for account in accounts:
+				if account[0] == UsernameLogin:
+					resetPassword = account[1]
+					resetEmail = account[4]
+					message = 'Hello ' + resetUsername + '\n' + 'Your Password is ' + resetPassword
+					server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
 			print('You will be receiveing an email shortly...')
 
 
@@ -107,16 +111,12 @@ while not exit:
 
 	if selection == '1':
 		#Register
-		Username, Password = Register()
+		Register()
 
 	elif selection == '2':
 		#Login
-		accounts = open('accounts.txt', 'r')
-		accounts = accounts.read()
-		accounts = accounts.split()
-		for x in range(int(len(accounts)/2)):
-			if accounts[x] == 'True':
-				Login(Username, Password)
+
+		Login()
 		
 	elif selection == '3':
 		#Log Out
