@@ -2,6 +2,7 @@
 
 import smtplib
 import os.path
+import os
 
 server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
 server.ehlo()
@@ -35,6 +36,8 @@ loggedin = False
 -add readme File
 -add func of if someone wans to recover account, but the account does not exist
 -add username is already taken
+-remove txt file from git
+-make sure txt is made before login
 
 EXTRA:
 	add encrypted password
@@ -70,7 +73,7 @@ def Register():
 	calculatedAge = 2016 - int(birthday)
 	with open('accounts.txt', 'a') as myFile:
 		myFile.write(str(Username) + ',' + str(Password) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(receiver) + ',')
-	
+	print('\n' + Username + '\'s account has been made.')
 
 def Login():
 	emailFound = False
@@ -109,6 +112,7 @@ def LogOut(UsernameLogin):
 	return loggedin
 exit  = False
 while not exit:
+	os.system('clear')
 	print('1. Register')
 	print('2. Login')
 	if loggedin:
