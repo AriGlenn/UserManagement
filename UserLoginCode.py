@@ -97,8 +97,8 @@ def Login():
 
 def LogOut():
 
-		loggedin = False
-		print(Username + ' has logged out')
+	loggedin = False
+	print(Username + ' has logged out')
 
 
 exit  = False
