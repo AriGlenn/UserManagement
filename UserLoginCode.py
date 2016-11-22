@@ -1,16 +1,11 @@
 
-
-import smtplib
-import os.path
-import os
+import smtplib, os.path, os
 os.system('clear')
-
 server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
 server.ehlo()
 server.starttls()
 server.ehlo()
 server.login('InfoRecovery.User@gmail.com','Recovery36')
-
 """
 Recovery Gmail SENDER :
 Acc:
@@ -20,7 +15,6 @@ Acc:
 loggedin = False
 RegisterRun = False
 emailFound = False
-
 accounts = []
 with open('accounts.txt', 'r') as myFile:
 	info = myFile.read()
@@ -28,9 +22,6 @@ with open('accounts.txt', 'r') as myFile:
 	for i in range(len(info)):
 		if i%5 == 0:
 			accounts.append(info[i:i+5])
-
-
-
 """
 -bug of not being able to login until the program is quit and re-run 
 -add readme File
@@ -54,8 +45,6 @@ def askQuestion():
 	receiver = input ('Please enter a recovery email: ')
 	birthday = input('Please enter the year you were born: ')
 	petname = input('Please enter your first pet\'s name: ')
-
-
 	for account in accounts:
 		if account[0] == Username:
 			print('This username has already been taken.')
@@ -72,7 +61,6 @@ def askQuestion():
 		return Username, Password, receiver, birthday, petname
 
 def Register():
-
 	Username, Password, receiver, birthday, petname = askQuestion()
 	calculatedAge = 2016 - int(birthday)
 	with open('accounts.txt', 'a') as myFile:
@@ -109,14 +97,12 @@ def Login():
 				print('The username you typed in does not exist.')
 	return UsernameLogin, loggedin
 
-
-
 def LogOut(UsernameLogin):
-
 	loggedin = False
 	print(UsernameLogin + ' has logged out --  ')
-
 	return loggedin
+
+
 exit  = False
 while not exit:
 	print('1. Register')
@@ -127,34 +113,24 @@ while not exit:
 		print('2. Login')
 		print('3. Exit')
 	selection = input('Input: ')
-
 	if selection == '1':
 		#Register
 		os.system('clear')
 		Register()
-
-
 	if loggedin:
 		if selection == '2':
 			#Log Out
 			os.system('clear')
-
 			loggedin = LogOut(UsernameLogin)
-
 		elif selection == '3':
 			os.system('clear')
-
 			exit = True
-
 	else: 
-
 		if selection == '2':
 		#Login
 			UsernameLogin,loggedin = Login()
-
 		elif selection == '3':
 			os.system('clear')
-
 			exit = True
 
 
