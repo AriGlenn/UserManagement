@@ -55,7 +55,12 @@ def askQuestion():
 	receiver = input ('Please enter a recovery email: ')
 	birthday = input('Please enter the year you were born: ')
 	petname = input('Please enter your first pet\'s name: ')
-	
+
+
+	for account in accounts:
+		if account[0] == Username:
+			print('This username has already been taken.')
+			askQuestion()
 	if Username == '' or Password == '' or receiver == '' or birthday == '' or petname == '':
 		print('Error: You have left one of the questions blank')
 		askQuestion()
