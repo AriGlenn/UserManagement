@@ -44,7 +44,7 @@ Once the user has logged in:
 ```
 if loggedin == True:
 		print('Welcome user ' + UsernameLogin + '!')
-		print('You are ' + age ' years old.')
+		print('You are ' + age + 'years old.')
 		print('You\'re first pet\'s name is ' + petname + '.')
 ```
 
