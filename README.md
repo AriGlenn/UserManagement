@@ -41,7 +41,8 @@ print('You will be receiveing an email shortly...')
 
 #### Create a navigation menu once logged in
 Once the user has logged in:
-```if loggedin == True:
+```
+if loggedin == True:
 		print('Welcome user ' + UsernameLogin + '!')
 		print('You are ' + age ' years old.')
 		print('You\'re first pet\'s name is ' + petname + '.')
@@ -57,3 +58,5 @@ CheckPassword = input('Please re-type your Password: ')
 if CheckPassword != Password:
 		print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
 ```
+
+By: Ari Glenn
