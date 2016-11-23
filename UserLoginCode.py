@@ -29,11 +29,12 @@ with open('accounts.txt', 'r') as myFile:
 		if i%5 == 0:
 			accounts.append(info[i:i+5])
 """
-add make sure they typed in email corrrectly
+	add make sure they typed in email corrrectly
 	add encrypted password
 	add Security questions
 		#Please enter the name of your first pet
 	change email messgae
+	change encryption of pass to include numbers
 """
 
 def askQuestion():
@@ -56,10 +57,6 @@ def askQuestion():
 
 
 	#ENCRYPT THE PASSWORD	
-	
-
-
-
 	key = 'badcfehgjilknmporqtsvuxwzy '
 	alphabet = 'abcdefghijklmnopqrstuvwxyz '
 	Password = Password.lower()
@@ -128,7 +125,8 @@ def Login():
 						index = key.find(ch)
 						resetPasswordDecrypted += alphabet[index]
 
-					message = 'Hello ' + resetUsername + '\n' + 'Your Password is ' + resetPasswordDecrypted
+					message = '\n\nRecovery account_info: \nHello ' + resetUsername + ',\n' + 'Your Password is ' + resetPasswordDecrypted + '\n \n Thanks for your service \n -Recovery Accounts.info'
+					print(message)
 					server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
 					print('You will be receiveing an email shortly...')
 					emailFound = True
