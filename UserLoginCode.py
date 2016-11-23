@@ -1,6 +1,5 @@
 
-import smtplib, os.path, os, getpass
-
+import smtplib, os.path, os, getpass, datetime
 
 os.system('clear')
 
@@ -22,6 +21,7 @@ loggedin = False
 RegisterRun = False
 emailFound = False
 
+
 #Create accounts
 accounts = []
 if not os.path.isfile('accounts.txt'):
@@ -32,11 +32,15 @@ with open('accounts.txt', 'r') as myFile:
 	info = myFile.read()
 	info = info.split(',')
 	for i in range(len(info)):
-		if i%6 == 0:
-			accounts.append(info[i:i+6])
+		if i%7 == 0:
+			accounts.append(info[i:i+7])
 """
 	bug:
-	account not existing when wanting to reset the password
+	account not being created and being able to login with out having to quit the program
+
+	bug:
+	when you type in all the reister info but get something wrong, then re-type the information, 
+		the information is the same as set in the beginning
 """
 
 
@@ -52,11 +56,12 @@ def Register():
 		CheckPassword = getpass.getpass('Please re-type your Password: ')
 		if CheckPassword != Password:
 			print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
+			Register()
 		emailAddress = input ('Please enter a recovery email: ')
 		birthday = input('Please enter the year you were born: ')
 		petname = input('Please enter your first pet\'s name: ')
 		bio = input('Bio:	(May not contain commas) Please tell us a little about yourself: ')
-
+		today = datetime.date.today()
 		#Error handling
 		for account in accounts:
 			if account[0] == Username:
@@ -108,14 +113,14 @@ def Register():
 
 		#Record the setup data and finalize creation of account
 		with open('accounts.txt', 'a') as myFile:
-			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',')
+			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',')
 			myFile.close()
 		with open('accounts.txt', 'r') as myFile:
 			info = myFile.read()
 			info = info.split(',')
 			for i in range(len(info)):
-				if i%6 == 0:
-					accounts.append(info[i:i+6])
+				if i%7 == 0:
+					accounts.append(info[i:i+7])
 		print('\n' + Username + '\'s account has been made. \n')
 
 
@@ -139,10 +144,12 @@ def Login():
 			age = account[2]
 			petname = account[3]
 			bio = account[5]
+			today = account[6]
 			print('Welcome user ' + UsernameLogin + '!')
 			print('You are ' + age + ' years old.')
 			print('You\'re first pet\'s name is ' + petname + '.')
 			print('Bio: ' + bio)
+			print('Account created on: ' + today)
 	global loggedin
 	if not loggedin:
 		print('Incorrect password or username: Please Try Again')
