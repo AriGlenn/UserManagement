@@ -30,6 +30,7 @@ with open('accounts.txt', 'r') as myFile:
 			accounts.append(info[i:i+5])
 """
 	add way to exit Security questions
+	clean up code
 """
 
 
@@ -54,6 +55,17 @@ def Register():
 		if Username == '' or Password == '' or emailAddress == '' or birthday == '' or petname == '':
 			print('Error: You have left one of the questions blank')
 			Register()
+
+		UserHasNonNumber = False
+		for ch in Username:
+			if not 122 > ord(ch) > 64:
+				try:
+					int(ch)
+				except ValueError:
+					UserHasNonNumber = True
+		if UserHasNonNumber == True:
+			print('Your password contains characters that are not letters and numbers')
+			return
 
 		if '@' not in emailAddress or '.' not in emailAddress:
 			print('Error: The email adress you have typed in does not exist. Please try again.')
@@ -128,6 +140,7 @@ def Login():
 							print('You have successfully recovered your account, your password is ' + resetPassword)
 						else:
 							print('You have failed to answer the security question')
+							return "," ","
 					elif HowtoRecover == '2':
 						server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
 						print('You will be receiveing an email shortly...')
