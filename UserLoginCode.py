@@ -29,10 +29,9 @@ with open('accounts.txt', 'r') as myFile:
 		if i%5 == 0:
 			accounts.append(info[i:i+5])
 """
-	add Security questions
-		#Please enter the name of your first pet
-	change encryption of pass to include numbers
+	add way to exit Security questions
 """
+
 
 def Register():
 	print('Username and Passwords must only contain letters and numbers')
@@ -59,7 +58,6 @@ def Register():
 		if '@' not in emailAddress or '.' not in emailAddress:
 			print('Error: The email adress you have typed in does not exist. Please try again.')
 			Register()
-
 		#ENCRYPT THE PASSWORD	
 		key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
 		alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
@@ -68,7 +66,6 @@ def Register():
 		for ch in Password:
 			index = alphabet.find(ch)
 			encryptedPassword += key[index]
-
 		try:
 			int(birthday)
 		except ValueError:
@@ -86,11 +83,11 @@ def Register():
 					accounts.append(info[i:i+5])
 		print('\n' + Username + '\'s account has been made. \n')
 
+
 def Login():
 	emailFound = False
 	UsernameLogin = input('Enter a Username: ')
 	PasswordLogin = input('Enter a Password: ')
-
 	key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
 	alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
 	PasswordLogin = PasswordLogin.lower()
@@ -98,7 +95,6 @@ def Login():
 	for ch in PasswordLogin:
 		index = alphabet.find(ch)
 		encryptedLoginPassword += key[index]
-	
 	for account in accounts:
 		if account[0] == UsernameLogin and account[1] == encryptedLoginPassword:
 			loggedin = True
@@ -117,22 +113,32 @@ def Login():
 				if account[0] == UsernameLogin:
 					resetPassword = account[1]
 					resetEmail = account[4]
-
+					securityQuestionAnswer = account[3]
 					key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
 					alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
 					resetPasswordDecrypted = ''
 					for ch in resetPassword:
 						index = key.find(ch)
 						resetPasswordDecrypted += alphabet[index]
-
 					message = '\n\nRecovery account_info: \nHello ' + resetUsername + ',\n' + 'Your Password is ' + resetPasswordDecrypted + '\n \n Thanks for your service \n -Recovery Accounts.info'
-					print(message)
-					server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
-					print('You will be receiveing an email shortly...')
+					HowtoRecover = input('You have to ways to recover your account \n1. You can answer a security question \n2. You can recieve an email containing your password \n: ')
+					if HowtoRecover == '1':
+						securityQuestion = input('What is the name of your first pet? ')
+						if securityQuestion == securityQuestionAnswer:
+							print('You have successfully recovered your account, your password is ' + resetPassword)
+						else:
+							print('You have failed to answer the security question')
+					elif HowtoRecover == '2':
+						server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
+						print('You will be receiveing an email shortly...')
+					else:
+						print('You did not select an available option')
+						return "," ","
 					emailFound = True
 			if emailFound == False:
 				print('The username you typed in does not exist.')
 	return UsernameLogin, loggedin
+
 
 def LogOut(UsernameLogin):
 	loggedin = False
