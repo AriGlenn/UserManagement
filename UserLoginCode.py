@@ -1,6 +1,8 @@
 
 import smtplib, os.path, os
 os.system('clear')
+
+#Set up Email server
 server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
 server.ehlo()
 server.starttls()
@@ -13,10 +15,12 @@ Acc:
 	Pass: Recovery36
 """
 
-
+#Create variables
 loggedin = False
 RegisterRun = False
 emailFound = False
+
+#Create accounts
 accounts = []
 if not os.path.isfile('accounts.txt'):
 	print('Creating accounts.txt ...')
@@ -29,12 +33,12 @@ with open('accounts.txt', 'r') as myFile:
 		if i%5 == 0:
 			accounts.append(info[i:i+5])
 """
-	add way to exit Security questions
 	clean up code
 """
 
 
 def Register():
+	#Ask questions to setup account
 	print('Username and Passwords must only contain letters and numbers')
 	goBack = input('To go back to the home menu press 1, to continue press Enter: ')
 	if goBack == '1':
@@ -48,6 +52,8 @@ def Register():
 		emailAddress = input ('Please enter a recovery email: ')
 		birthday = input('Please enter the year you were born: ')
 		petname = input('Please enter your first pet\'s name: ')
+
+		#Error handling
 		for account in accounts:
 			if account[0] == Username:
 				print('This username has already been taken.')
@@ -84,7 +90,10 @@ def Register():
 			print('Error: You typed in a word instead of a number for your birthday')
 			askQuestion()
 
+		#Calculate the age
 		calculatedAge = 2016 - int(birthday)
+
+		#Record the setup data and finalize creation of account
 		with open('accounts.txt', 'a') as myFile:
 			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',')
 		with open('accounts.txt', 'r') as myFile:
@@ -98,8 +107,10 @@ def Register():
 
 def Login():
 	emailFound = False
+	#Ask login questions
 	UsernameLogin = input('Enter a Username: ')
 	PasswordLogin = input('Enter a Password: ')
+	#Encrypt login password to compare to password in txt file
 	key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
 	alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
 	PasswordLogin = PasswordLogin.lower()
@@ -107,6 +118,7 @@ def Login():
 	for ch in PasswordLogin:
 		index = alphabet.find(ch)
 		encryptedLoginPassword += key[index]
+		#Check if password matches
 	for account in accounts:
 		if account[0] == UsernameLogin and account[1] == encryptedLoginPassword:
 			loggedin = True
@@ -122,6 +134,7 @@ def Login():
 		if reset == '1':
 			resetUsername = input('Enter your username associated with the account you would like to recovery: ')
 			for account in accounts:
+					#Record info stored in txt
 				if account[0] == UsernameLogin:
 					resetPassword = account[1]
 					resetEmail = account[4]
@@ -132,6 +145,8 @@ def Login():
 					for ch in resetPassword:
 						index = key.find(ch)
 						resetPasswordDecrypted += alphabet[index]
+
+					#Ways to recover accounts
 					message = '\n\nRecovery account_info: \nHello ' + resetUsername + ',\n' + 'Your Password is ' + resetPasswordDecrypted + '\n \n Thanks for your service \n -Recovery Accounts.info'
 					HowtoRecover = input('You have to ways to recover your account \n1. You can answer a security question \n2. You can recieve an email containing your password \n: ')
 					if HowtoRecover == '1':
@@ -145,20 +160,23 @@ def Login():
 						server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
 						print('You will be receiveing an email shortly...')
 					else:
+						#Error handling for selecting a key that is not an option
 						print('You did not select an available option')
 						return "," ","
 					emailFound = True
+			#Error handling for username not existsing
 			if emailFound == False:
 				print('The username you typed in does not exist.')
 	return UsernameLogin, loggedin
 
 
 def LogOut(UsernameLogin):
+	#Log the individual out
 	loggedin = False
 	print(UsernameLogin + ' has logged out --  ')
 	return loggedin
 
-
+#Create a navigational menu
 exit  = False
 while not exit:
 	print('1. Register')
