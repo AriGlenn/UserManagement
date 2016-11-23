@@ -32,47 +32,51 @@ with open('accounts.txt', 'r') as myFile:
 	add Security questions
 		#Please enter the name of your first pet
 	change encryption of pass to include numbers
-	add back function when Registering
 """
 
 def askQuestion():
 	print('Username and Passwords must only contain letters and numbers')
-	Username = input('Create a Username: ')
-	Password = input('Create a Password: ')
-	CheckPassword = input('Please re-type your Password: ')
-	if CheckPassword != Password:
-		print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
-	emailAddress = input ('Please enter a recovery email: ')
-	birthday = input('Please enter the year you were born: ')
-	petname = input('Please enter your first pet\'s name: ')
-	for account in accounts:
-		if account[0] == Username:
-			print('This username has already been taken.')
-			askQuestion()
-	if Username == '' or Password == '' or emailAddress == '' or birthday == '' or petname == '':
-		print('Error: You have left one of the questions blank')
-		askQuestion()
-
-	if '@' not in emailAddress or '.' not in email:
-		print('Error: The email adress you have typed in does not exist. Please try again.')
-		askQuestion()
-
-	#ENCRYPT THE PASSWORD	
-	key = 'badcfehgjilknmporqtsvuxwzy '
-	alphabet = 'abcdefghijklmnopqrstuvwxyz '
-	Password = Password.lower()
-	encryptedPassword = ''
-	for ch in Password:
-		index = alphabet.find(ch)
-		encryptedPassword += key[index]
-
-	try:
-		int(birthday)
-	except ValueError:
-		print('Error: You typed in a word instead of a number for your birthday')
-		askQuestion()
+	goBack = input('To go back to the home menu press 1, to continue press Enter: ')
+	if goBack == '1':
+		pass
 	else:
-		return Username, encryptedPassword, emailAddress, birthday, petname
+		Username = input('Create a Username: ')
+		Password = input('Create a Password: ')
+		CheckPassword = input('Please re-type your Password: ')
+		if CheckPassword != Password:
+			print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
+		emailAddress = input ('Please enter a recovery email: ')
+		birthday = input('Please enter the year you were born: ')
+		petname = input('Please enter your first pet\'s name: ')
+		for account in accounts:
+			if account[0] == Username:
+				print('This username has already been taken.')
+				askQuestion()
+		if Username == '' or Password == '' or emailAddress == '' or birthday == '' or petname == '':
+			print('Error: You have left one of the questions blank')
+			askQuestion()
+
+		if '@' not in emailAddress or '.' not in email:
+			print('Error: The email adress you have typed in does not exist. Please try again.')
+			askQuestion()
+
+		#ENCRYPT THE PASSWORD	
+		key = 'badcfehgjilknmporqtsvuxwzy '
+		alphabet = 'abcdefghijklmnopqrstuvwxyz '
+		Password = Password.lower()
+		encryptedPassword = ''
+		for ch in Password:
+			index = alphabet.find(ch)
+			encryptedPassword += key[index]
+
+		try:
+			int(birthday)
+		except ValueError:
+			print('Error: You typed in a word instead of a number for your birthday')
+			askQuestion()
+		else:
+			return Username, encryptedPassword, emailAddress, birthday, petname
+			Register()
 
 def Register():
 	Username, encryptedPassword, emailAddress, birthday, petname = askQuestion()
@@ -154,7 +158,8 @@ while not exit:
 	if selection == '1':
 		#Register
 		os.system('clear')
-		Register()
+		#Register()
+		askQuestion()
 	if loggedin:
 		if selection == '2':
 			#Log Out
@@ -167,7 +172,6 @@ while not exit:
 		if selection == '2':
 			#Login
 			UsernameLogin,loggedin = Login()
-
 		elif selection == '3':
 			#Exit
 			os.system('clear')
