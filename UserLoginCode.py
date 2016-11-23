@@ -1,6 +1,5 @@
 
 import smtplib, os.path, os, getpass, datetime
-
 os.system('clear')
 
 #Set up Email server
@@ -35,21 +34,18 @@ with open('accounts.txt', 'r') as myFile:
 		if i%7 == 0:
 			accounts.append(info[i:i+7])
 """
-	bug:
-	account not being created and being able to login with out having to quit the program
-
-	bug:
-	when you type in all the reister info but get something wrong, then re-type the information, 
-		the information is the same as set in the beginning
+	bug: 
+	where it thinks z is not a letter
 """
 
 
 def Register():
+
 	#Ask questions to setup account
 	print('Username and Passwords must only contain letters and numbers')
 	goBack = input('To go back to the home menu press 1, to continue press Enter: ')
 	if goBack == '1':
-		pass
+		return
 	else:
 		Username = input('Create a Username: ')
 		Password = getpass.getpass('Create a Password: ')
@@ -62,6 +58,7 @@ def Register():
 		petname = input('Please enter your first pet\'s name: ')
 		bio = input('Bio:	(May not contain commas) Please tell us a little about yourself: ')
 		today = datetime.date.today()
+
 		#Error handling
 		for account in accounts:
 			if account[0] == Username:
@@ -77,12 +74,9 @@ def Register():
 		if 	bioHasComma == True:
 			print('Your bio had a comma')
 			Register()
-
-
-
 		UserHasNonNumber = False
 		for ch in Username:
-			if not 122 > ord(ch) > 64:
+			if not 122 >= ord(ch) >= 64:
 				try:
 					int(ch)
 				except ValueError:
@@ -94,6 +88,7 @@ def Register():
 		if '@' not in emailAddress or '.' not in emailAddress:
 			print('Error: The email adress you have typed in does not exist. Please try again.')
 			Register()
+
 		#ENCRYPT THE PASSWORD	
 		key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
 		alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
@@ -122,13 +117,17 @@ def Register():
 				if i%7 == 0:
 					accounts.append(info[i:i+7])
 		print('\n' + Username + '\'s account has been made. \n')
+#		print(accounts)
 
 
 def Login():
+
 	emailFound = False
+
 	#Ask login questions
 	UsernameLogin = input('Enter a Username: ')
 	PasswordLogin = getpass.getpass('Enter a Password: ')
+
 	#Encrypt login password to compare to password in txt file
 	key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
 	alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
@@ -137,9 +136,16 @@ def Login():
 	for ch in PasswordLogin:
 		index = alphabet.find(ch)
 		encryptedLoginPassword += key[index]
+#	print(UsernameLogin)
+#	print(encryptedLoginPassword)
+
 		#Check if password matches
 	for account in accounts:
 		if account[0] == UsernameLogin and account[1] == encryptedLoginPassword:
+
+			print(account[0])
+			print(account[1])
+
 			loggedin = True
 			age = account[2]
 			petname = account[3]
@@ -157,6 +163,7 @@ def Login():
 		if reset == '1':
 			resetUsername = input('Enter your username associated with the account you would like to recovery: ')
 			for account in accounts:
+
 					#Record info stored in txt
 				if account[0] == UsernameLogin:
 					resetPassword = account[1]
@@ -183,10 +190,12 @@ def Login():
 						server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
 						print('You will be receiveing an email shortly...')
 					else:
+
 						#Error handling for selecting a key that is not an option
 						print('You did not select an available option')
 						return "," ","
 					emailFound = True
+
 			#Error handling for username not existsing
 			if emailFound == False:
 				print('The username you typed in does not exist.')
@@ -194,6 +203,7 @@ def Login():
 
 
 def LogOut(UsernameLogin):
+
 	#Log the individual out
 	loggedin = False
 	print(UsernameLogin + ' has logged out --  ')
@@ -213,11 +223,13 @@ while not exit:
 		print('3. Exit')
 	selection = input('Input: ')
 	if selection == '1':
+
 		#Register
 		os.system('clear')
 		Register()
 	if loggedin:
 		if selection == '2':
+
 			#Log Out
 			os.system('clear')
 			loggedin = LogOut(UsernameLogin)
@@ -226,9 +238,11 @@ while not exit:
 			exit = True
 	else: 
 		if selection == '2':
+
 			#Login
 			UsernameLogin,loggedin = Login()
 		elif selection == '3':
+
 			#Exit
 			os.system('clear')
 			exit = True
