@@ -65,7 +65,7 @@ def Register():
 	calculatedAge = 2016 - int(birthday)
 	with open('accounts.txt', 'a') as myFile:
 		myFile.write(str(Username) + ',' + str(Password) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(receiver) + ',')
-	print('\n' + Username + '\'s account has been made.')
+	print('\n' + Username + '\'s account has been made. \n')
 
 def Login():
 	emailFound = False
