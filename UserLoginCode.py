@@ -35,7 +35,8 @@ with open('accounts.txt', 'r') as myFile:
 		if i%6 == 0:
 			accounts.append(info[i:i+6])
 """
-	clean up code
+	bug:
+	account not existing when wanting to reset the password
 """
 
 
@@ -54,7 +55,7 @@ def Register():
 		emailAddress = input ('Please enter a recovery email: ')
 		birthday = input('Please enter the year you were born: ')
 		petname = input('Please enter your first pet\'s name: ')
-		bio = input('Bio:	Please tell us a little about yourself: ')
+		bio = input('Bio:	(May not contain commas) Please tell us a little about yourself: ')
 
 		#Error handling
 		for account in accounts:
@@ -64,6 +65,15 @@ def Register():
 		if Username == '' or Password == '' or emailAddress == '' or birthday == '' or petname == '' or bio == '':
 			print('Error: You have left one of the questions blank')
 			Register()
+		bioHasComma = False
+		for ch in bio:
+			if ch == ',':
+				bioHasComma = True
+		if 	bioHasComma == True:
+			print('Your bio had a comma')
+			Register()
+
+
 
 		UserHasNonNumber = False
 		for ch in Username:
@@ -99,6 +109,7 @@ def Register():
 		#Record the setup data and finalize creation of account
 		with open('accounts.txt', 'a') as myFile:
 			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',')
+			myFile.close()
 		with open('accounts.txt', 'r') as myFile:
 			info = myFile.read()
 			info = info.split(',')
