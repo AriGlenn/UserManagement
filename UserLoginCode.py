@@ -1,5 +1,5 @@
 
-import smtplib, os.path, os
+import smtplib, os.path, os, getpass
 os.system('clear')
 
 #Set up Email server
@@ -45,8 +45,8 @@ def Register():
 		pass
 	else:
 		Username = input('Create a Username: ')
-		Password = input('Create a Password: ')
-		CheckPassword = input('Please re-type your Password: ')
+		Password = getpass.getpass('Create a Password: ')
+		CheckPassword = getpass.getpass('Please re-type your Password: ')
 		if CheckPassword != Password:
 			print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
 		emailAddress = input ('Please enter a recovery email: ')
@@ -88,7 +88,7 @@ def Register():
 			int(birthday)
 		except ValueError:
 			print('Error: You typed in a word instead of a number for your birthday')
-			askQuestion()
+			Register()
 
 		#Calculate the age
 		calculatedAge = 2016 - int(birthday)
@@ -109,7 +109,7 @@ def Login():
 	emailFound = False
 	#Ask login questions
 	UsernameLogin = input('Enter a Username: ')
-	PasswordLogin = input('Enter a Password: ')
+	PasswordLogin = getpass.getpass('Enter a Password: ')
 	#Encrypt login password to compare to password in txt file
 	key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
 	alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
