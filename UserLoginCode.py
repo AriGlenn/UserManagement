@@ -34,7 +34,7 @@ with open('accounts.txt', 'r') as myFile:
 	change encryption of pass to include numbers
 """
 
-def askQuestion():
+def Register():
 	print('Username and Passwords must only contain letters and numbers')
 	goBack = input('To go back to the home menu press 1, to continue press Enter: ')
 	if goBack == '1':
@@ -51,18 +51,18 @@ def askQuestion():
 		for account in accounts:
 			if account[0] == Username:
 				print('This username has already been taken.')
-				askQuestion()
+				Register()
 		if Username == '' or Password == '' or emailAddress == '' or birthday == '' or petname == '':
 			print('Error: You have left one of the questions blank')
-			askQuestion()
+			Register()
 
-		if '@' not in emailAddress or '.' not in email:
+		if '@' not in emailAddress or '.' not in emailAddress:
 			print('Error: The email adress you have typed in does not exist. Please try again.')
-			askQuestion()
+			Register()
 
 		#ENCRYPT THE PASSWORD	
-		key = 'badcfehgjilknmporqtsvuxwzy '
-		alphabet = 'abcdefghijklmnopqrstuvwxyz '
+		key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
+		alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
 		Password = Password.lower()
 		encryptedPassword = ''
 		for ch in Password:
@@ -74,30 +74,25 @@ def askQuestion():
 		except ValueError:
 			print('Error: You typed in a word instead of a number for your birthday')
 			askQuestion()
-		else:
-			return Username, encryptedPassword, emailAddress, birthday, petname
-			Register()
 
-def Register():
-	Username, encryptedPassword, emailAddress, birthday, petname = askQuestion()
-	calculatedAge = 2016 - int(birthday)
-	with open('accounts.txt', 'a') as myFile:
-		myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',')
-	with open('accounts.txt', 'r') as myFile:
-		info = myFile.read()
-		info = info.split(',')
-		for i in range(len(info)):
-			if i%5 == 0:
-				accounts.append(info[i:i+5])
-	print('\n' + Username + '\'s account has been made. \n')
+		calculatedAge = 2016 - int(birthday)
+		with open('accounts.txt', 'a') as myFile:
+			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',')
+		with open('accounts.txt', 'r') as myFile:
+			info = myFile.read()
+			info = info.split(',')
+			for i in range(len(info)):
+				if i%5 == 0:
+					accounts.append(info[i:i+5])
+		print('\n' + Username + '\'s account has been made. \n')
 
 def Login():
 	emailFound = False
 	UsernameLogin = input('Enter a Username: ')
 	PasswordLogin = input('Enter a Password: ')
 
-	key = 'badcfehgjilknmporqtsvuxwzy '
-	alphabet = 'abcdefghijklmnopqrstuvwxyz '
+	key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
+	alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
 	PasswordLogin = PasswordLogin.lower()
 	encryptedLoginPassword = ''
 	for ch in PasswordLogin:
@@ -123,8 +118,8 @@ def Login():
 					resetPassword = account[1]
 					resetEmail = account[4]
 
-					key = 'badcfehgjilknmporqtsvuxwzy '
-					alphabet = 'abcdefghijklmnopqrstuvwxyz '
+					key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
+					alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
 					resetPasswordDecrypted = ''
 					for ch in resetPassword:
 						index = key.find(ch)
@@ -158,8 +153,7 @@ while not exit:
 	if selection == '1':
 		#Register
 		os.system('clear')
-		#Register()
-		askQuestion()
+		Register()
 	if loggedin:
 		if selection == '2':
 			#Log Out
