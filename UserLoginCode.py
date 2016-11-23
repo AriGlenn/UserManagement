@@ -29,32 +29,33 @@ with open('accounts.txt', 'r') as myFile:
 		if i%5 == 0:
 			accounts.append(info[i:i+5])
 """
-	add make sure they typed in email corrrectly
-	add encrypted password
 	add Security questions
 		#Please enter the name of your first pet
-	change email messgae
 	change encryption of pass to include numbers
+	add back function when Registering
 """
 
 def askQuestion():
-	print('Username and Passwords must only contain letters and number')
+	print('Username and Passwords must only contain letters and numbers')
 	Username = input('Create a Username: ')
 	Password = input('Create a Password: ')
 	CheckPassword = input('Please re-type your Password: ')
 	if CheckPassword != Password:
 		print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
-	receiver = input ('Please enter a recovery email: ')
+	emailAddress = input ('Please enter a recovery email: ')
 	birthday = input('Please enter the year you were born: ')
 	petname = input('Please enter your first pet\'s name: ')
 	for account in accounts:
 		if account[0] == Username:
 			print('This username has already been taken.')
 			askQuestion()
-	if Username == '' or Password == '' or receiver == '' or birthday == '' or petname == '':
+	if Username == '' or Password == '' or emailAddress == '' or birthday == '' or petname == '':
 		print('Error: You have left one of the questions blank')
 		askQuestion()
 
+	if '@' not in emailAddress or '.' not in email:
+		print('Error: The email adress you have typed in does not exist. Please try again.')
+		askQuestion()
 
 	#ENCRYPT THE PASSWORD	
 	key = 'badcfehgjilknmporqtsvuxwzy '
@@ -71,13 +72,13 @@ def askQuestion():
 		print('Error: You typed in a word instead of a number for your birthday')
 		askQuestion()
 	else:
-		return Username, encryptedPassword, receiver, birthday, petname
+		return Username, encryptedPassword, emailAddress, birthday, petname
 
 def Register():
-	Username, encryptedPassword, receiver, birthday, petname = askQuestion()
+	Username, encryptedPassword, emailAddress, birthday, petname = askQuestion()
 	calculatedAge = 2016 - int(birthday)
 	with open('accounts.txt', 'a') as myFile:
-		myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(receiver) + ',')
+		myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',')
 	with open('accounts.txt', 'r') as myFile:
 		info = myFile.read()
 		info = info.split(',')
