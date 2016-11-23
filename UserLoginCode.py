@@ -29,9 +29,11 @@ with open('accounts.txt', 'r') as myFile:
 		if i%5 == 0:
 			accounts.append(info[i:i+5])
 """
+add make sure they typed in email corrrectly
 	add encrypted password
 	add Security questions
 		#Please enter the name of your first pet
+	change email messgae
 """
 
 def askQuestion():
@@ -51,19 +53,34 @@ def askQuestion():
 	if Username == '' or Password == '' or receiver == '' or birthday == '' or petname == '':
 		print('Error: You have left one of the questions blank')
 		askQuestion()
+
+
+	#ENCRYPT THE PASSWORD	
+	
+
+
+
+	key = 'badcfehgjilknmporqtsvuxwzy '
+	alphabet = 'abcdefghijklmnopqrstuvwxyz '
+	Password = Password.lower()
+	encryptedPassword = ''
+	for ch in Password:
+		index = alphabet.find(ch)
+		encryptedPassword += key[index]
+
 	try:
 		int(birthday)
 	except ValueError:
 		print('Error: You typed in a word instead of a number for your birthday')
 		askQuestion()
 	else:
-		return Username, Password, receiver, birthday, petname
+		return Username, encryptedPassword, receiver, birthday, petname
 
 def Register():
-	Username, Password, receiver, birthday, petname = askQuestion()
+	Username, encryptedPassword, receiver, birthday, petname = askQuestion()
 	calculatedAge = 2016 - int(birthday)
 	with open('accounts.txt', 'a') as myFile:
-		myFile.write(str(Username) + ',' + str(Password) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(receiver) + ',')
+		myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(receiver) + ',')
 	with open('accounts.txt', 'r') as myFile:
 		info = myFile.read()
 		info = info.split(',')
@@ -76,8 +93,17 @@ def Login():
 	emailFound = False
 	UsernameLogin = input('Enter a Username: ')
 	PasswordLogin = input('Enter a Password: ')
+
+	key = 'badcfehgjilknmporqtsvuxwzy '
+	alphabet = 'abcdefghijklmnopqrstuvwxyz '
+	PasswordLogin = PasswordLogin.lower()
+	encryptedLoginPassword = ''
+	for ch in PasswordLogin:
+		index = alphabet.find(ch)
+		encryptedLoginPassword += key[index]
+	
 	for account in accounts:
-		if account[0] == UsernameLogin and account[1] == PasswordLogin:
+		if account[0] == UsernameLogin and account[1] == encryptedLoginPassword:
 			loggedin = True
 			age = account[2]
 			petname = account[3]
@@ -94,7 +120,15 @@ def Login():
 				if account[0] == UsernameLogin:
 					resetPassword = account[1]
 					resetEmail = account[4]
-					message = 'Hello ' + resetUsername + '\n' + 'Your Password is ' + resetPassword
+
+					key = 'badcfehgjilknmporqtsvuxwzy '
+					alphabet = 'abcdefghijklmnopqrstuvwxyz '
+					resetPasswordDecrypted = ''
+					for ch in resetPassword:
+						index = key.find(ch)
+						resetPasswordDecrypted += alphabet[index]
+
+					message = 'Hello ' + resetUsername + '\n' + 'Your Password is ' + resetPasswordDecrypted
 					server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
 					print('You will be receiveing an email shortly...')
 					emailFound = True
