@@ -12,10 +12,16 @@ Acc:
 	User: InfoRecovery.User@gmail.com
 	Pass: Recovery36
 """
+
+
 loggedin = False
 RegisterRun = False
 emailFound = False
 accounts = []
+if not os.path.isfile('accounts.txt'):
+	print('Creating accounts.txt ...')
+	open('accounts.txt', 'w')
+
 with open('accounts.txt', 'r') as myFile:
 	info = myFile.read()
 	info = info.split(',')
@@ -23,13 +29,6 @@ with open('accounts.txt', 'r') as myFile:
 		if i%5 == 0:
 			accounts.append(info[i:i+5])
 """
--bug of not being able to login until the program is quit and re-run 
--add readme File
--remove txt file from git
--make sure txt is made before login
--get rid of login option after you log in
-
-EXTRA:
 	add encrypted password
 	add Security questions
 		#Please enter the name of your first pet
@@ -133,9 +132,11 @@ while not exit:
 			exit = True
 	else: 
 		if selection == '2':
-		#Login
+			#Login
 			UsernameLogin,loggedin = Login()
+
 		elif selection == '3':
+			#Exit
 			os.system('clear')
 			exit = True
 
