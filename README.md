@@ -59,4 +59,17 @@ if CheckPassword != Password:
 		print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
 ```
 
+#### If you encounter an error:
+
+Please send me an email at ariisawesome22@gmail.com
+
+#### To install this program:
+
+1. Open terminal
+2. Select destination of the coding file
+3. Type the following into terminal:
+```
+git clone git@github.com:kehillah-coding-2017/user-management-AriGlenn.git
+```
+
 By: Ari Glenn
