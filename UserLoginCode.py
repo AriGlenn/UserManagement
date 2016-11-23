@@ -32,8 +32,8 @@ with open('accounts.txt', 'r') as myFile:
 	info = myFile.read()
 	info = info.split(',')
 	for i in range(len(info)):
-		if i%5 == 0:
-			accounts.append(info[i:i+5])
+		if i%6 == 0:
+			accounts.append(info[i:i+6])
 """
 	clean up code
 """
@@ -54,13 +54,14 @@ def Register():
 		emailAddress = input ('Please enter a recovery email: ')
 		birthday = input('Please enter the year you were born: ')
 		petname = input('Please enter your first pet\'s name: ')
+		bio = input('Bio:	Please tell us a little about yourself: ')
 
 		#Error handling
 		for account in accounts:
 			if account[0] == Username:
 				print('This username has already been taken.')
 				Register()
-		if Username == '' or Password == '' or emailAddress == '' or birthday == '' or petname == '':
+		if Username == '' or Password == '' or emailAddress == '' or birthday == '' or petname == '' or bio == '':
 			print('Error: You have left one of the questions blank')
 			Register()
 
@@ -97,13 +98,13 @@ def Register():
 
 		#Record the setup data and finalize creation of account
 		with open('accounts.txt', 'a') as myFile:
-			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',')
+			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',')
 		with open('accounts.txt', 'r') as myFile:
 			info = myFile.read()
 			info = info.split(',')
 			for i in range(len(info)):
-				if i%5 == 0:
-					accounts.append(info[i:i+5])
+				if i%6 == 0:
+					accounts.append(info[i:i+6])
 		print('\n' + Username + '\'s account has been made. \n')
 
 
@@ -126,9 +127,11 @@ def Login():
 			loggedin = True
 			age = account[2]
 			petname = account[3]
+			bio = account[5]
 			print('Welcome user ' + UsernameLogin + '!')
 			print('You are ' + age + ' years old.')
 			print('You\'re first pet\'s name is ' + petname + '.')
+			print('Bio: ' + bio)
 	global loggedin
 	if not loggedin:
 		print('Incorrect password or username: Please Try Again')
