@@ -1,5 +1,7 @@
 
 import smtplib, os.path, os, getpass
+
+
 os.system('clear')
 
 #Set up Email server
@@ -175,6 +177,8 @@ def LogOut(UsernameLogin):
 	loggedin = False
 	print(UsernameLogin + ' has logged out --  ')
 	return loggedin
+
+
 
 #Create a navigational menu
 exit  = False
