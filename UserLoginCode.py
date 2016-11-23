@@ -65,6 +65,12 @@ def Register():
 	calculatedAge = 2016 - int(birthday)
 	with open('accounts.txt', 'a') as myFile:
 		myFile.write(str(Username) + ',' + str(Password) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(receiver) + ',')
+	with open('accounts.txt', 'r') as myFile:
+		info = myFile.read()
+		info = info.split(',')
+		for i in range(len(info)):
+			if i%5 == 0:
+				accounts.append(info[i:i+5])
 	print('\n' + Username + '\'s account has been made. \n')
 
 def Login():
