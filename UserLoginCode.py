@@ -1,5 +1,9 @@
 
 import smtplib, os.path, os, getpass, datetime
+from PIL import Image
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
+ 
 os.system('clear')
 
 #Set up Email server
@@ -21,6 +25,11 @@ RegisterRun = False
 emailFound = False
 
 
+"""
+Add profile photo
+"""
+
+
 #Create accounts
 accounts = []
 if not os.path.isfile('accounts.txt'):
@@ -31,15 +40,28 @@ with open('accounts.txt', 'r') as myFile:
 	info = myFile.read()
 	info = info.split(',')
 	for i in range(len(info)):
-		if i%7 == 0:
-			accounts.append(info[i:i+7])
-"""
-	bug: 
-	where it thinks z is not a letter
-"""
+		if i%8 == 0:
+			accounts.append(info[i:i+8])
 
 
 def Register():
+
+
+
+	#Start the selection of the profile picture
+	print('Please select the image you would like to use as your profile photo \nPlease wait for the selector to open...\n')
+	Tk().withdraw()
+	filename = askopenfilename()
+	print(filename)
+	
+		#make the file selector close
+		#make the image display in the terminal
+
+
+	
+
+
+
 
 	#Ask questions to setup account
 	print('Username and Passwords must only contain letters and numbers')
@@ -108,16 +130,15 @@ def Register():
 
 		#Record the setup data and finalize creation of account
 		with open('accounts.txt', 'a') as myFile:
-			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',')
+			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',' + str(filename) + ',')
 			myFile.close()
 		with open('accounts.txt', 'r') as myFile:
 			info = myFile.read()
 			info = info.split(',')
 			for i in range(len(info)):
-				if i%7 == 0:
-					accounts.append(info[i:i+7])
+				if i%8 == 0:
+					accounts.append(info[i:i+8])
 		print('\n' + Username + '\'s account has been made. \n')
-#		print(accounts)
 
 
 def Login():
@@ -151,11 +172,15 @@ def Login():
 			petname = account[3]
 			bio = account[5]
 			today = account[6]
+			filename = account[7]
 			print('Welcome user ' + UsernameLogin + '!')
 			print('You are ' + age + ' years old.')
 			print('You\'re first pet\'s name is ' + petname + '.')
 			print('Bio: ' + bio)
 			print('Account created on: ' + today)
+			print('Your profile photo is opening...')
+			profileDisplay = Image.open(str(filename))
+			profileDisplay.show()
 	global loggedin
 	if not loggedin:
 		print('Incorrect password or username: Please Try Again')
@@ -182,7 +207,7 @@ def Login():
 					if HowtoRecover == '1':
 						securityQuestion = input('What is the name of your first pet? ')
 						if securityQuestion == securityQuestionAnswer:
-							print('You have successfully recovered your account, your password is ' + resetPassword)
+							print('You have successfully recovered your account, your password is ' + resetPasswordDecrypted)
 						else:
 							print('You have failed to answer the security question')
 							return "," ","
@@ -246,5 +271,10 @@ while not exit:
 			#Exit
 			os.system('clear')
 			exit = True
+
+
+
+
+
 
 
