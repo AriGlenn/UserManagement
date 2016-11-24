@@ -1,7 +1,7 @@
 # User Management
 
 ## How it works
-This program can register, login, and logout of any account. The accounts are stored and can be used after the program is closed and re-opened. The program has a recovery email, where if you forget your password or username, it will send you an email containg the information. This program stores your age, first pet's name, and much more. 
+This program can register, login, and logout of any account. The accounts are stored and can be used after the program is closed and re-opened. The program has a recovery email, where if you forget your password or username, it will send you an email containg the information. This program stores your age, first pet's name, and much more.
 
 
 ## The code
@@ -54,7 +54,7 @@ print('Username and Passwords must only contain letters and number')
 Username = input('Create a Username: ')
 Password = input('Create a Password: ')
 CheckPassword = input('Please re-type your Password: ')
-    
+
 if CheckPassword != Password:
 		print('Error: Not the same password' + '\n' + 'Please Try Again'  + '\n')
 ```
@@ -65,11 +65,27 @@ Please send me an email at ariisawesome22@gmail.com
 
 #### To install this program:
 
-1. Open terminal
+1. Open terminal (You must be using a Mac)
 2. Select destination of the coding file
 3. Type the following into terminal:
 ```
 git clone git@github.com:kehillah-coding-2017/user-management-AriGlenn.git
 ```
+4. Before running you must install pip, pillow, and twillio
+		To install pip:
+		http://stackoverflow.com/questions/17271319/how-to-install-pip-on-mac-os-x
+5. Once pip is installed, open terminal and type:
+```
+pip3 install pillow
+```
+6. After pillow is installed, open terminal and type:
+```
+pip3 install twillio
+```
+7. Once all of this is done and you have the most up to date version of the program, in terminal find where the program is stored using: ls and cd to navigate. Then type
+```
+python3 UserLoginCode.py
+```
+		To run the program
 
 By: Ari Glenn
