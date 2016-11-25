@@ -1,5 +1,5 @@
 
-import smtplib, os.path, os, getpass, datetime
+import smtplib, os.path, os, getpass, datetime, time
 from PIL import Image
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
@@ -26,7 +26,13 @@ emailFound = False
 
 
 """
-Add profile photo
+Add career 
+Add gender
+Add physical adress
+Add telephone number
+Add Bank account and password
+Make the file selector close
+Make the image display in the terminal
 """
 
 
@@ -45,20 +51,15 @@ with open('accounts.txt', 'r') as myFile:
 
 
 def Register():
-
-
+	
 
 	#Start the selection of the profile picture
 	print('Please select the image you would like to use as your profile photo \nPlease wait for the selector to open...\n')
 	Tk().withdraw()
 	filename = askopenfilename()
-	print(filename)
-	
-		#make the file selector close
-		#make the image display in the terminal
+	#print(filename)
+		
 
-
-	
 
 
 
@@ -140,6 +141,10 @@ def Register():
 					accounts.append(info[i:i+8])
 		print('\n' + Username + '\'s account has been made. \n')
 
+		#Send email confirming account has been made
+		message = 'Welcome User ' + Username + ',\nYour account has been made \nDate made: ' + str(today) + '\n\n-Account Info'
+		server.sendmail('InfoRecovery.User@gmail.com', emailAddress, message)
+
 
 def Login():
 
@@ -178,10 +183,14 @@ def Login():
 			print('You\'re first pet\'s name is ' + petname + '.')
 			print('Bio: ' + bio)
 			print('Account created on: ' + today)
-			print('Your profile photo is opening...')
+			print('Your profile photo is opening...\n')
 			profileDisplay = Image.open(str(filename))
 			profileDisplay.show()
+
+
+
 	global loggedin
+	#global profileDisplay
 	if not loggedin:
 		print('Incorrect password or username: Please Try Again')
 		reset = input('Forgot Password? Press 1 to reset: ')
