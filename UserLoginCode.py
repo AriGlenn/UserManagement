@@ -19,6 +19,9 @@ Acc:
 	Pass: Recovery36
 """
 
+#global loggedin
+
+
 #Create variables
 loggedin = False
 RegisterRun = False
@@ -26,12 +29,16 @@ emailFound = False
 
 
 """
-Add career 
+
+
++conformation email
+Not being able to login
+Add error if not connected to wifi
 Add gender
 Add physical adress
 Add telephone number
 Add Bank account and password
-Make the file selector close
+Add error check for the file selector
 Make the image display in the terminal
 """
 
@@ -46,8 +53,8 @@ with open('accounts.txt', 'r') as myFile:
 	info = myFile.read()
 	info = info.split(',')
 	for i in range(len(info)):
-		if i%8 == 0:
-			accounts.append(info[i:i+8])
+		if i%9 == 0:
+			accounts.append(info[i:i+9])
 
 
 def Register():
@@ -59,10 +66,6 @@ def Register():
 	filename = askopenfilename()
 	#print(filename)
 		
-
-
-
-
 
 	#Ask questions to setup account
 	print('Username and Passwords must only contain letters and numbers')
@@ -80,6 +83,7 @@ def Register():
 		birthday = input('Please enter the year you were born: ')
 		petname = input('Please enter your first pet\'s name: ')
 		bio = input('Bio:	(May not contain commas) Please tell us a little about yourself: ')
+		career = input('Enter the name of your company *optional (Press enter to skip): ')
 		today = datetime.date.today()
 
 		#Error handling
@@ -131,16 +135,16 @@ def Register():
 
 		#Record the setup data and finalize creation of account
 		with open('accounts.txt', 'a') as myFile:
-			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',' + str(filename) + ',')
+			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',' + str(filename) + ',' + str(career) + ',')
 			myFile.close()
 		with open('accounts.txt', 'r') as myFile:
 			info = myFile.read()
 			info = info.split(',')
 			for i in range(len(info)):
-				if i%8 == 0:
-					accounts.append(info[i:i+8])
+				if i%9 == 0:
+					accounts.append(info[i:i+9])
 		print('\n' + Username + '\'s account has been made. \n')
-
+		#print(accounts)
 		#Send email confirming account has been made
 		message = 'Welcome User ' + Username + ',\nYour account has been made \nDate made: ' + str(today) + '\n\n-Account Info'
 		server.sendmail('InfoRecovery.User@gmail.com', emailAddress, message)
@@ -168,26 +172,23 @@ def Login():
 		#Check if password matches
 	for account in accounts:
 		if account[0] == UsernameLogin and account[1] == encryptedLoginPassword:
-
-			print(account[0])
-			print(account[1])
-
 			loggedin = True
 			age = account[2]
 			petname = account[3]
 			bio = account[5]
 			today = account[6]
 			filename = account[7]
+			career = account[8]
 			print('Welcome user ' + UsernameLogin + '!')
 			print('You are ' + age + ' years old.')
 			print('You\'re first pet\'s name is ' + petname + '.')
 			print('Bio: ' + bio)
+			if career != '':
+				print('The company you work for is ' + career)
 			print('Account created on: ' + today)
 			print('Your profile photo is opening...\n')
 			profileDisplay = Image.open(str(filename))
 			profileDisplay.show()
-
-
 
 	global loggedin
 	#global profileDisplay
