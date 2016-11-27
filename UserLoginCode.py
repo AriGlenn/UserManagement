@@ -6,21 +6,23 @@ from tkinter.filedialog import askopenfilename
  
 os.system('clear')
 
+print('Loading...')
+
 #Set up Email server
 server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
 server.ehlo()
 server.starttls()
 server.ehlo()
 server.login('InfoRecovery.User@gmail.com','Recovery36')
+
+os.system('clear')
+
 """
 Recovery Gmail SENDER :
 Acc:
 	User: InfoRecovery.User@gmail.com
 	Pass: Recovery36
 """
-
-#Make the confirmation code
-confirmationCode = random.randint(4000, 5000)
 
 
 #Create variables
@@ -30,6 +32,8 @@ emailFound = False
 
 
 """
+Error of wifi
+Not registering account error
 Add telephone number
 Add Bank account and password
 Add error check for the file selector if not an image
@@ -53,8 +57,16 @@ with open('accounts.txt', 'r') as myFile:
 			accounts.append(info[i:i+11])
 
 
+
+			
+print(accounts)
+
+
+
 def Register():
 	
+	#Make the confirmation code
+	confirmationCode = random.randint(1000, 5000)
 
 	#Start the selection of the profile picture
 	print('Please select the image you would like to use as your profile photo \nPlease wait for the selector to open...\n')
@@ -162,7 +174,6 @@ def Register():
 					if i%11 == 0:
 						accounts.append(info[i:i+11])
 			print('\n' + Username + '\'s account has been made. \n')
-			#print(accounts)
 		else:
 			resend = input('The verification code you have entered is incorrect. To resend the code press 1, to go back press any key: ')
 			if resend == '1':
@@ -235,7 +246,7 @@ def Login():
 	#global profileDisplay
 	if not loggedin:
 		print('Incorrect password or username')
-		reset = input('Forgot Password? Press 1 to reset, 2 to re-enter your password: ')
+		reset = input('Forgot Password? Press 1 to reset, 2 to re-enter your password, and any other key to go back: ')
 		if reset == '1':
 			resetUsername = input('Enter your username associated with the account you would like to recovery: ')
 			for account in accounts:
