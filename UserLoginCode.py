@@ -8,14 +8,21 @@ os.system('clear')
 
 print('Loading...')
 
-#Set up Email server
-server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
-server.ehlo()
-server.starttls()
-server.ehlo()
-server.login('InfoRecovery.User@gmail.com','Recovery36')
 
-os.system('clear')
+
+#Set up Email server
+
+try:
+	server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
+	server.ehlo()
+	server.starttls()
+	server.ehlo()
+	server.login('InfoRecovery.User@gmail.com','Recovery36')
+except:
+	print('It seems something went wrong, please check your wifi connectivity and try again')
+	quit()
+
+
 
 """
 Recovery Gmail SENDER :
@@ -32,8 +39,6 @@ emailFound = False
 
 
 """
-Error of wifi
-Not registering account error
 Add telephone number
 Add Bank account and password
 Add error check for the file selector if not an image
@@ -56,12 +61,7 @@ with open('accounts.txt', 'r') as myFile:
 		if i%11 == 0:
 			accounts.append(info[i:i+11])
 
-
-
-			
-print(accounts)
-
-
+#print(accounts)
 
 def Register():
 	
