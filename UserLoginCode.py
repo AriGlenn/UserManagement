@@ -1,5 +1,5 @@
 
-import smtplib, os.path, os, getpass, datetime, time
+import smtplib, os.path, os, getpass, datetime, time, random
 from PIL import Image
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
@@ -19,7 +19,8 @@ Acc:
 	Pass: Recovery36
 """
 
-#global loggedin
+#Make the confirmation code
+confirmationCode = random.randint(4000, 5000)
 
 
 #Create variables
@@ -29,16 +30,15 @@ emailFound = False
 
 
 """
-
-
 +conformation email
-Not being able to login
+Add option to redo password
 Add error if not connected to wifi
 Add gender
 Add physical adress
 Add telephone number
 Add Bank account and password
-Add error check for the file selector
+Add error check for the file selector if not an image
+Close the file selector
 Make the image display in the terminal
 """
 
@@ -133,21 +133,33 @@ def Register():
 		#Calculate the age
 		calculatedAge = 2016 - int(birthday)
 
-		#Record the setup data and finalize creation of account
-		with open('accounts.txt', 'a') as myFile:
-			myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',' + str(filename) + ',' + str(career) + ',')
-			myFile.close()
-		with open('accounts.txt', 'r') as myFile:
-			info = myFile.read()
-			info = info.split(',')
-			for i in range(len(info)):
-				if i%9 == 0:
-					accounts.append(info[i:i+9])
-		print('\n' + Username + '\'s account has been made. \n')
-		#print(accounts)
 		#Send email confirming account has been made
-		message = 'Welcome User ' + Username + ',\nYour account has been made \nDate made: ' + str(today) + '\n\n-Account Info'
+		message = 'Welcome User ' + Username + ',\nYour account is one step away from being made. Copy and paste the verification code into the program to continue. Verification code: ' + str(confirmationCode) + '\n\n-Account Info'
 		server.sendmail('InfoRecovery.User@gmail.com', emailAddress, message)
+
+		#Confirm email
+		verificationCode = input('A verification code has been sent to your email, please type it in here to confirm your account: ')
+
+		if str(verificationCode) == str(confirmationCode):
+			#Record the setup data and finalize creation of account
+			with open('accounts.txt', 'a') as myFile:
+				myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',' + str(filename) + ',' + str(career) + ',')
+				myFile.close()
+			with open('accounts.txt', 'r') as myFile:
+				info = myFile.read()
+				info = info.split(',')
+				for i in range(len(info)):
+					if i%9 == 0:
+						accounts.append(info[i:i+9])
+			print('\n' + Username + '\'s account has been made. \n')
+			#print(accounts)
+		else:
+			resend = input('The verification code you have entered is incorrect. To resend the code press 1, to go back press any key: ')
+			if resend == '1':
+				message = 'Welcome User ' + Username + ',\nThis is your re-activation code: ' + str(confirmationCode) + ' Copy and paste the verification code into the program to continue.' + '\n\n-Account Info'
+				server.sendmail('InfoRecovery.User@gmail.com', emailAddress, message)
+			else:
+				return
 
 
 def Login():
@@ -170,6 +182,7 @@ def Login():
 #	print(encryptedLoginPassword)
 
 		#Check if password matches
+
 	for account in accounts:
 		if account[0] == UsernameLogin and account[1] == encryptedLoginPassword:
 			loggedin = True
@@ -184,7 +197,7 @@ def Login():
 			print('You\'re first pet\'s name is ' + petname + '.')
 			print('Bio: ' + bio)
 			if career != '':
-				print('The company you work for is ' + career)
+				print('The company you work for is: ' + career)
 			print('Account created on: ' + today)
 			print('Your profile photo is opening...\n')
 			profileDisplay = Image.open(str(filename))
@@ -193,7 +206,7 @@ def Login():
 	global loggedin
 	#global profileDisplay
 	if not loggedin:
-		print('Incorrect password or username: Please Try Again')
+		print('Incorrect password or username')
 		reset = input('Forgot Password? Press 1 to reset: ')
 		if reset == '1':
 			resetUsername = input('Enter your username associated with the account you would like to recovery: ')
