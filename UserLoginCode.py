@@ -30,16 +30,13 @@ emailFound = False
 
 
 """
-Commit Gender and homeAddress
-
-
-Add error if not connected to wifi
 Add telephone number
 Add Bank account and password
 Add error check for the file selector if not an image
 Close the file selector
 Make the image display in the terminal
 """
+
 
 
 #Create accounts
@@ -145,8 +142,11 @@ def Register():
 
 		#Send email confirming account has been made
 		message = 'Welcome User ' + Username + ',\nYour account is one step away from being made. Copy and paste the verification code into the program to continue. Verification code: ' + str(confirmationCode) + '\n\n-Account Info'
-		server.sendmail('InfoRecovery.User@gmail.com', emailAddress, message)
-
+		try:
+			server.sendmail('InfoRecovery.User@gmail.com', emailAddress, message)
+		except:
+			print('It seems something went wrong, please check you wifi connectivity and try again')
+			Register()
 		#Confirm email
 		verificationCode = input('A verification code has been sent to your email, please type it in here to confirm your account: ')
 
@@ -167,7 +167,11 @@ def Register():
 			resend = input('The verification code you have entered is incorrect. To resend the code press 1, to go back press any key: ')
 			if resend == '1':
 				message = 'Welcome User ' + Username + ',\nThis is your re-activation code: ' + str(confirmationCode) + ' Copy and paste the verification code into the program to continue.' + '\n\n-Account Info'
-				server.sendmail('InfoRecovery.User@gmail.com', emailAddress, message)
+				try:
+					server.sendmail('InfoRecovery.User@gmail.com', emailAddress, message)
+				except:
+					print('It seems something went wrong, please check you wifi connectivity and try again')
+					Register()
 				verificationCodetwo = input('The re-verification code has been sent to your email, please type it in here to confirm your account: ')
 				if str(verificationCodetwo) == str(confirmationCode):
 					with open('accounts.txt', 'a') as myFile:
@@ -259,8 +263,15 @@ def Login():
 							print('You have failed to answer the security question')
 							return "," ","
 					elif HowtoRecover == '2':
-						server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
-						print('You will be receiveing an email shortly...')
+
+
+						try:
+							server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
+							print('You will be receiveing an email shortly...')
+
+						except:
+							print('It seems something went wrong, please check you wifi connectivity and try again')
+							Login()
 					else:
 
 						#Error handling for selecting a key that is not an option
