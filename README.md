@@ -81,7 +81,7 @@ pip3 install pillow
 ```
 6. After pillow is installed, open terminal and type:
 ```
-pip3 install twillio
+pip3 install twilio
 ```
 7. Once all of this is done and you have the most up to date version of the program, in terminal find where the program is stored using: ls and cd to navigate. Then type:
 ```
