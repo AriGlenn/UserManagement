@@ -1,5 +1,5 @@
 
-import smtplib, os.path, os, getpass, datetime, time, random, webbrowser
+import smtplib, os.path, os, getpass, datetime, time, random, webbrowser, password
 from PIL import Image
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
@@ -19,7 +19,7 @@ try:
 	server.ehlo()
 	server.starttls()
 	server.ehlo()
-	server.login('InfoRecovery.User@gmail.com','Recovery36')
+	server.login(password.password3, password.password2)
 except:
 	print('It seems something went wrong, please check your wifi connectivity and try again')
 	quit()
@@ -29,8 +29,8 @@ except:
 """
 Recovery Gmail SENDER :
 Acc:
-	User: InfoRecovery.User@gmail.com
-	Pass: Recovery36
+	User: password3
+	Pass: password2
 """
 
 
@@ -42,6 +42,7 @@ emailFound = False
 
 """
 Add directions to go home
+Secret commit (hides password)
 
 Add telephone number
 Add Bank account and password
@@ -142,7 +143,7 @@ def Register():
 			Register()
 
 		#ENCRYPT THE PASSWORD	
-		key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
+		key = password.password1
 		alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
 		Password = Password.lower()
 		encryptedPassword = ''
@@ -157,10 +158,6 @@ def Register():
 
 		#Calculate the age
 		calculatedAge = 2016 - int(birthday)
-
-
-#ariisawesome22@gmail.com
-#twos
 
 		#Send email confirming account has been made
 		message = 'Welcome User ' + Username + ',\nYour account is one step away from being made. Copy and paste the verification code into the program to continue. Verification code: ' + str(confirmationCode) + '\n\n-Account Info'
@@ -239,7 +236,7 @@ def Login():
 	PasswordLogin = getpass.getpass('Enter a Password: ')
 
 	#Encrypt login password to compare to password in txt file
-	key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
+	key = password.password1
 	alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
 	PasswordLogin = PasswordLogin.lower()
 	encryptedLoginPassword = ''
