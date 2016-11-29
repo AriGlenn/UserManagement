@@ -1,5 +1,5 @@
 
-import smtplib, os.path, os, getpass, datetime, time, random
+import smtplib, os.path, os, getpass, datetime, time, random, webbrowser
 from PIL import Image
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
@@ -41,6 +41,8 @@ emailFound = False
 
 
 """
+Add directions to go home
+
 Add telephone number
 Add Bank account and password
 Add error check for the file selector if not an image
@@ -169,7 +171,7 @@ def Register():
 			Register()
 		#Confirm email
 		verificationCode = input('A verification code has been sent to your email, please type it in here to confirm your account: ')
-
+		webbrowser.open("https://mail.google.com/mail/")
 		if str(verificationCode) == str(confirmationCode):
 
 			client = TwilioRestClient("AC29cd2211a452fe4e4f745fee7fdb048a", "11bf9e6de7779b7b7093c407e1ea6e88")
