@@ -1,15 +1,24 @@
-import os.path, os
-os.system('clear')
-import smtplib, getpass, datetime, time, random, webbrowser, password, sqlite3, googlemaps
-from PIL import Image
-from tkinter import Tk
-from tkinter.filedialog import askopenfilename
-from twilio.rest import TwilioRestClient
-import functions
+#Add friends
+#Add medical info with link to how to solve the disease
+#Add I don't have a pet option
+#Add telephone number
+#Add error check for the file selector if not an image
+#Edit readme
+#Add function for encrypting password
+"""
+Main file
+"""
 
+#import the needed packages
+import functions, smtplib, password, sqlite3
+import os.path, os
+
+#clear the screen
+os.system('clear')
 
 print('Loading...')
-#Set up SQL
+
+#Set up the SQL database
 db = sqlite3.connect('User.db')
 cursor = db.cursor()
 cursor.execute('''CREATE TABLE if not exists users (username text primary key, password text, email text, age text, petname text, bio text, todayDate text, filename text, career text, gender text, homeAddress text)''')
@@ -17,40 +26,14 @@ cursor.execute('''CREATE TABLE if not exists friends (user text primary key, fri
 db.commit()
 db.close()
 
-
-#Set up Email server
-try:
-	server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
-	server.ehlo()
-	server.starttls()
-	server.ehlo()
-	server.login(password.password3, password.password2)
-except:
-	print('It seems something went wrong, please check your wifi connectivity and try again')
-	quit()
-
-	
 #Create variables
 loggedin = False
 RegisterRun = False
 emailFound = False
 
-
-"""
-Add friends
-Add medical info with link to how to solve the disease
-Add I don't have a pet option
-Add telephone number
-Add error check for the file selector if not an image
-add squl to readme
-"""
-
-
-
 #Create a navigational menu
 exit  = False
 while not exit:
-	#os.system('clear')
 	print('1. Register')
 	if loggedin:
 		print('2. Log out')
@@ -69,6 +52,7 @@ while not exit:
 			os.system('clear')
 			loggedin = functions.LogOut(UsernameLogin)
 		elif selection == '3':
+			#Exit
 			os.system('clear')
 			exit = True
 	else: 
@@ -79,3 +63,5 @@ while not exit:
 			#Exit
 			os.system('clear')
 			exit = True
+
+
