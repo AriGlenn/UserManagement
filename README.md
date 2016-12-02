@@ -5,10 +5,27 @@ This program can register, login, and logout of any account. The accounts are st
 
 
 ## The code
-#### Store the username, password, age, and first pet's name
+#### Store the username, password, age, and first pet's name using SQL
 ```
-with open('accounts.txt', 'a') as myFile:
-		myFile.write(str(Username) + ' ' + str(Password) + ' ' + str(calculatedAge) + ' ' + str(petname) + '\n')
+db = sqlite3.connect('User.db')
+cursor = db.cursor()
+cursor.execute('''CREATE TABLE if not exists users (username text primary key, password text, email text, age text, petname text, bio text, todayDate text, filename text, career text, gender text, homeAddress text)''')
+cursor.execute('''CREATE TABLE if not exists friends (user text primary key, friendsList text, friendRequests text)''')
+db.commit()
+db.close()
+
+#Record the setup data and finalize creation of account by using sql
+create_user_db = sqlite3.connect('User.db')
+curs = create_user_db.cursor()
+curs.execute('''INSERT INTO users (username, password, email, age, petname, bio, todayDate, filename, career, gender, homeAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', [(Username), (encryptedPassword), (emailAddress), (calculatedAge), (petname), (bio), (today), (filename), (career), (gender), (homeAddress)])
+create_user_db.commit()
+create_user_db.close()
+```
+
+#### Using twilio to send text messages
+```
+client = TwilioRestClient("**********************************", "********************************")
+client.messages.create(to="+***********", from_="+***********", body="An account has just been created. The username for the account is: " + Username + " and the password is: " + Password)			
 ```
 
 #### Create a main menu
@@ -83,7 +100,11 @@ pip3 install pillow
 ```
 pip3 install twilio
 ```
-7. Once all of this is done and you have the most up to date version of the program, in terminal find where the program is stored using: ls and cd to navigate. Then type:
+7. After twilio is installed, open terminal and type:
+```
+pip3 install sql
+```
+8. Once all of this is done and you have the most up to date version of the program, in terminal find where the program is stored using: ls and cd to navigate. Then type:
 ```
 python3 UserLoginCode.py
 ```
