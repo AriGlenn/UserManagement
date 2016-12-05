@@ -5,6 +5,7 @@
 #Add error check for the file selector if not an image
 #Edit readme
 #Add function for encrypting password
+#Add so if resetusername non existant
 """
 Main file
 """

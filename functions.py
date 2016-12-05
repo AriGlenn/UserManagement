@@ -23,6 +23,12 @@ except:
 #The Register function
 def Register():
 
+	"""
+		The register function: 
+		-Gets and stores inmportant information such as passwords, birthdates, usernames, email, and more. 
+		-It then saves this information in a datatbase using SQL
+	"""
+
 	print('Username and Passwords must only contain letters and numbers')
 
 	#Make the confirmation code
@@ -206,6 +212,13 @@ def Register():
 
 def Login():
 
+	"""
+		The login function: 
+		-Checks and compares your username and password
+		-If it matches to an account, it then logs you in and gives you information about yourself
+		-You you fail to login, the login function gives you a choice to recover your account
+	"""
+
 	#Set emailFound to false
 	emailFound = False
 
@@ -229,7 +242,62 @@ def Login():
 	user = curs.fetchone()
 	create_user_db.commit()
 	create_user_db.close()
-	if user != [] or user is not None:
+	if user == [] or user is None:
+
+		#The username does not match the password
+		print('Account Not Found')
+		loggedin = False
+		global loggedin
+		#global profileDisplay
+		if not loggedin:
+			print('Incorrect password or username')
+			reset = input('Forgot Password? Press 1 to reset, 2 to re-enter your password, and any other key to go back: ')
+			global reset
+			if reset == '1':
+				resetUsername = input('Enter your username associated with the account you would like to recovery: ')
+				#Record info stored in txt
+				create_user_db = sqlite3.connect('User.db')
+				curs = create_user_db.cursor()
+				curs.execute('''select * from users where username = ?''', [(resetUsername)])
+				user = curs.fetchone()
+				create_user_db.commit()
+				create_user_db.close()
+				if user[0] == resetUsername:
+					resetPassword = user[1]
+					resetEmail = user[4]
+					securityQuestionAnswer = user[3]
+					key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
+					alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
+					resetPasswordDecrypted = ''
+					for ch in resetPassword:
+						index = key.find(ch)
+						resetPasswordDecrypted += alphabet[index]
+					#Ways to recover accounts
+					message = '\n\nRecovery account_info: \nHello ' + resetUsername + ',\n' + 'Your Password is ' + resetPasswordDecrypted + '\n \n Thanks for your service \n -Recovery Accounts.info'
+					HowtoRecover = input('You have to ways to recover your account \n1. You can answer a security question \n2. You can recieve an email containing your password \n: ')
+					if HowtoRecover == '1':
+						securityQuestion = input('What is the name of your first pet? ')
+						if securityQuestion == securityQuestionAnswer:
+							print('You have successfully recovered your account, your password is ' + resetPasswordDecrypted)
+						else:
+							print('You have failed to answer the security question')
+							return UsernameLogin, loggedin
+					elif HowtoRecover == '2':
+						try:
+							server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
+							print('You will be receiveing an email shortly...')
+						except:
+							print('It seems something went wrong, please check you wifi connectivity and try again')
+							Login()
+					else:
+						#Error handling for selecting a key that is not an option
+						print('You did not select an available option')
+						return "," ","
+					emailFound = True
+			elif reset == '2':
+				Login()
+			
+	else:
 
 		#Password matches, log the user in, and print all the user's info
 		loggedin = True
@@ -284,72 +352,23 @@ def Login():
 			if wantToAddFriends == 'n':
 				return UsernameLogin, loggedin
 			else: 
-				print('Invalid option. Please try again:')				
-	else:
-		#The username does not match the password
-		print('Account Not Found')
-		loggedin = False
-		global loggedin
-		#global profileDisplay
-		if not loggedin:
-			print('Incorrect password or username')
-			reset = input('Forgot Password? Press 1 to reset, 2 to re-enter your password, and any other key to go back: ')
-			global reset
-			if reset == '1':
-				resetUsername = input('Enter your username associated with the account you would like to recovery: ')
-				#Record info stored in txt
-				create_user_db = sqlite3.connect('User.db')
-				curs = create_user_db.cursor()
-				curs.execute('''select * from users where username = ?''', [(resetUsername)])
-				user = curs.fetchone()
-				create_user_db.commit()
-				create_user_db.close()
-				if user[0] == resetUsername:
-					resetPassword = user[1]
-					resetEmail = user[4]
-					securityQuestionAnswer = user[3]
-					key = 'bad5cfeh8gjilkn16mp2or39qts74vux0wzy/ '
-					alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
-					resetPasswordDecrypted = ''
-					for ch in resetPassword:
-						index = key.find(ch)
-						resetPasswordDecrypted += alphabet[index]
-					#Ways to recover accounts
-					message = '\n\nRecovery account_info: \nHello ' + resetUsername + ',\n' + 'Your Password is ' + resetPasswordDecrypted + '\n \n Thanks for your service \n -Recovery Accounts.info'
-					HowtoRecover = input('You have to ways to recover your account \n1. You can answer a security question \n2. You can recieve an email containing your password \n: ')
-					if HowtoRecover == '1':
-						securityQuestion = input('What is the name of your first pet? ')
-						if securityQuestion == securityQuestionAnswer:
-							print('You have successfully recovered your account, your password is ' + resetPasswordDecrypted)
-						else:
-							print('You have failed to answer the security question')
-							return UsernameLogin, loggedin
-					elif HowtoRecover == '2':
-						try:
-							server.sendmail('InfoRecovery.User@gmail.com', resetEmail, message)
-							print('You will be receiveing an email shortly...')
-						except:
-							print('It seems something went wrong, please check you wifi connectivity and try again')
-							Login()
-					else:
-						#Error handling for selecting a key that is not an option
-						print('You did not select an available option')
-						return "," ","
-					emailFound = True
-			#Error handling for username not existsing
-			if emailFound == False:
-				print('The username you typed in does not exist.')
-			loggedin = False
-		elif reset == '2':
-			Login()
+				print('Invalid option. Please try again:')	
+	#Error handling for username not existsing
+	if emailFound == False:
+		print('The username you typed in does not exist.')
+		loggedin = False			
 	return UsernameLogin, loggedin
 
 def LogOut(UsernameLogin):
+
+	"""
+		The logout function: 
+		-Logs you out and hides the information given to you when you are logged in
+	"""
+
 	#Log the user out
 	loggedin = False
 	print(UsernameLogin + ' has logged out --  ')
 	return loggedin
-
-
 
 
