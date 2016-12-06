@@ -2,8 +2,11 @@
 Functions
 """
 
+import os.path, os
+os.system('clear')
+
 #import the needed packages
-import smtplib, getpass, datetime, time, random, webbrowser, password, sqlite3, os.path, os
+import smtplib, getpass, datetime, time, random, webbrowser, password, sqlite3
 from PIL import Image
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
