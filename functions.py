@@ -3,7 +3,9 @@ Functions
 """
 
 import os.path, os
+#clear the screen
 os.system('clear')
+print('Loading...')
 
 #import the needed packages
 import smtplib, getpass, datetime, time, random, webbrowser, password, sqlite3
@@ -94,9 +96,12 @@ def Register():
 		#Ask questions to setup account
 		emailAddress = input ('Please enter a recovery email: ')
 
-		#Error handling if the email address is not a real email address
-		if '@' not in emailAddress or '.' not in emailAddress:
-			print('Error: The email adress you have typed in does not exist. Please try again.')
+		#Error handling if the email address is not a real email address and send email confirming account has been made
+		message = 'Welcome User ' + Username + ',\nYour account is one step away from being made. Copy and paste the verification code into the program to continue. Verification code: ' + str(confirmationCode) + '\n\n-Account Info'
+		try:
+			server.sendmail('InfoRecovery.User@gmail.com', emailAddress, message)
+		except:
+			print('It seems something went wrong, please check your wifi connectivity and make sure your email exists.')
 			Register()
 
 		birthday = input('Please enter the year you were born: ')
@@ -156,14 +161,6 @@ def Register():
 
 		#Calculate the age of the user
 		calculatedAge = 2016 - int(birthday)
-
-		#Send email confirming account has been made
-		message = 'Welcome User ' + Username + ',\nYour account is one step away from being made. Copy and paste the verification code into the program to continue. Verification code: ' + str(confirmationCode) + '\n\n-Account Info'
-		try:
-			server.sendmail('InfoRecovery.User@gmail.com', emailAddress, message)
-		except:
-			print('It seems something went wrong, please check you wifi connectivity and try again')
-			Register()
 
 		#Confirm email
 		webbrowser.open("https://mail.google.com/mail/")
