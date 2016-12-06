@@ -23,13 +23,13 @@ create_user_db.close()
 ```
 
 #### Using twilio to send text messages
-```
+```python
 client = TwilioRestClient("**********************************", "********************************")
 client.messages.create(to="+***********", from_="+***********", body="An account has just been created. The username for the account is: " + Username + " and the password is: " + Password)			
 ```
 
 #### Create a main menu
-```
+```python
 exit  = False
 while not exit:
 	print('1. Register')
@@ -40,7 +40,7 @@ while not exit:
 ```
 
 #### Set up a server to deliver a recovery email
-```
+```python
 import smtplib
 
 server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
@@ -58,7 +58,7 @@ print('You will be receiveing an email shortly...')
 
 #### Create a navigation menu once logged in
 Once the user has logged in:
-```
+```python
 if loggedin == True:
 		print('Welcome user ' + UsernameLogin + '!')
 		print('You are ' + age + 'years old.')
@@ -66,7 +66,7 @@ if loggedin == True:
 ```
 
 #### To make sure the password has been typed in correctly
-```
+```python
 print('Username and Passwords must only contain letters and number')
 Username = input('Create a Username: ')
 Password = input('Create a Password: ')
