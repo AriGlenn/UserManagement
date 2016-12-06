@@ -105,8 +105,13 @@ pip3 install twilio
 pip3 install sql
 ```
 8. Once all of this is done and you have the most up to date version of the program, in terminal find where the program is stored using: 
-ls (to list the items in a directory, and 
+
+ls (to list the items in a directory)
+
+and 
+
 cd (to navigate to the next directory) 
+
 Then type:
 ```
 python3 UserLoginCode.py
