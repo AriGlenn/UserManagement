@@ -20,6 +20,23 @@ except:
 	print('It seems something went wrong, please check your wifi connectivity and try again')
 	quit()
 
+
+
+def EncryptPassword(Password):
+	"""
+		-Take a password and encrypt it
+	"""
+
+	key = password.password1
+	alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
+	Password = Password.lower()
+	encryptedPassword = ''
+	for ch in Password:
+		index = alphabet.find(ch)
+		encryptedPassword += key[index]
+	return encryptedPassword
+
+
 #The Register function
 def Register():
 
@@ -50,6 +67,18 @@ def Register():
 			print('Username is taken')
 		db.close()	
 
+		#Error handling if an non-letter has been entered as the Username
+		UserHasNonNumber = False
+		for ch in Username:
+			if not 122 >= ord(ch) >= 64:
+				try:
+					int(ch)
+				except ValueError:
+					UserHasNonNumber = True
+		if UserHasNonNumber == True:
+			print('Your password contains characters that are not letters and numbers')
+			return
+
 		#Ask questions to setup account
 		Password = getpass.getpass('Create a Password: ')
 		CheckPassword = getpass.getpass('Please re-type your Password: ')
@@ -61,6 +90,12 @@ def Register():
 
 		#Ask questions to setup account
 		emailAddress = input ('Please enter a recovery email: ')
+
+		#Error handling if the email address is not a real email address
+		if '@' not in emailAddress or '.' not in emailAddress:
+			print('Error: The email adress you have typed in does not exist. Please try again.')
+			Register()
+
 		birthday = input('Please enter the year you were born: ')
 
 		#Start the selection of the profile picture
@@ -106,31 +141,8 @@ def Register():
 			print('Your bio had a comma')
 			Register()
 
-		#Error handling if an non-letter has been entered as the Username
-		UserHasNonNumber = False
-		for ch in Username:
-			if not 122 >= ord(ch) >= 64:
-				try:
-					int(ch)
-				except ValueError:
-					UserHasNonNumber = True
-		if UserHasNonNumber == True:
-			print('Your password contains characters that are not letters and numbers')
-			return
-
-		#Error handling if the email address is not a real email address
-		if '@' not in emailAddress or '.' not in emailAddress:
-			print('Error: The email adress you have typed in does not exist. Please try again.')
-			Register()
-
-		#ENCRYPT THE PASSWORD	
-		key = password.password1
-		alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
-		Password = Password.lower()
-		encryptedPassword = ''
-		for ch in Password:
-			index = alphabet.find(ch)
-			encryptedPassword += key[index]
+		#ENCRYPT THE PASSWORD
+		encryptedPassword = EncryptPassword(Password)
 
 		#Error handling if the birthday the user has typed in is not a number
 		try:
@@ -227,13 +239,8 @@ def Login():
 	PasswordLogin = getpass.getpass('Enter a Password: ')
 
 	#Encrypt login password to compare to password in sql database
-	key = password.password1
-	alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890 '
-	PasswordLogin = PasswordLogin.lower()
-	encryptedLoginPassword = ''
-	for ch in PasswordLogin:
-		index = alphabet.find(ch)
-		encryptedLoginPassword += key[index]
+	Password = PasswordLogin
+	encryptedLoginPassword = EncryptPassword(Password)
 
 	#Check if password matches
 	create_user_db = sqlite3.connect('User.db')

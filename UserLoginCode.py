@@ -1,9 +1,7 @@
 #Add friends
 #Add medical info with link to how to solve the disease
 #Add I don't have a pet option
-#Add telephone number
 #Add error check for the file selector if not an image
-#Edit readme
 #Add function for encrypting password
 #Add so if resetusername non existant
 """
@@ -11,8 +9,7 @@ Main file
 """
 
 #import the needed packages
-import functions, smtplib, password, sqlite3
-import os.path, os
+import functions, smtplib, password, sqlite3, os.path, os
 
 #clear the screen
 os.system('clear')
@@ -64,5 +61,6 @@ while not exit:
 			#Exit
 			os.system('clear')
 			exit = True
+	
 
 
