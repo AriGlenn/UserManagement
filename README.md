@@ -6,7 +6,7 @@ This program can register, login, and logout of any account. The accounts are st
 
 ## The code
 #### Store the username, password, age, and first pet's name using SQL
-```
+```python
 db = sqlite3.connect('User.db')
 cursor = db.cursor()
 cursor.execute('''CREATE TABLE if not exists users (username text primary key, password text, email text, age text, petname text, bio text, todayDate text, filename text, career text, gender text, homeAddress text)''')
@@ -106,11 +106,11 @@ pip3 install sql
 ```
 8. Once all of this is done and you have the most up to date version of the program, in terminal find where the program is stored using: 
 
-ls (to list the items in a directory)
+	ls (to list the items in a directory)
 
-and 
+	and 
 
-cd (to navigate to the next directory) 
+	cd (to navigate to the next directory) 
 
 Then type:
 ```
