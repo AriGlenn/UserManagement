@@ -111,6 +111,13 @@ def Register():
 		Tk().withdraw()
 		filename = askopenfilename()
 
+		#Error handling for profile photo not being an image
+		try:
+			profileDisplay = Image.open(str(filename))
+		except:
+			print('You did not select an image as a profile photo')
+			Register()
+
 		#Ask questions to setup account
 		petname = input('Please enter your first pet\'s name: ')
 		bio = input('Bio:	(May not contain commas) Please tell us a little about yourself: ')
