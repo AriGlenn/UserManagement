@@ -231,8 +231,8 @@ def Login():
 		-You you fail to login, the login function gives you a choice to recover your account
 	"""
 
-	#Set emailFound to false
-	emailFound = False
+	#Set emailFound to true
+	emailFound = True
 
 	#Ask login questions
 	UsernameLogin = input('Enter a Username: ')
@@ -258,15 +258,16 @@ def Login():
 		reset = input('Forgot Password? Press 1 to reset, 2 to re-enter your password, and any other key to go back: ')
 		global reset
 		if reset == '1':
-			resetUsername = input('Enter your username associated with the account you would like to recovery: ')
+			#resetUsername = input('Enter your username associated with the account you would like to recovery: ')
 			#Record info stored in txt
 			create_user_db = sqlite3.connect('User.db')
 			curs = create_user_db.cursor()
-			curs.execute('''select * from users where username = ?''', [(resetUsername)])
+			curs.execute('''select * from users where username = ?''', [(UsernameLogin)])
 			user = curs.fetchone()
 			create_user_db.commit()
 			create_user_db.close()
-			if user[0] == resetUsername:
+	
+			if user is not None:
 				resetPassword = user[1]
 				resetEmail = user[4]
 				securityQuestionAnswer = user[3]
@@ -277,7 +278,7 @@ def Login():
 					index = key.find(ch)
 					resetPasswordDecrypted += alphabet[index]
 				#Ways to recover accounts
-				message = '\n\nRecovery account_info: \nHello ' + resetUsername + ',\n' + 'Your Password is ' + resetPasswordDecrypted + '\n \n Thanks for your service \n -Recovery Accounts.info'
+				message = '\n\nRecovery account_info: \nHello ' + UsernameLogin + ',\n' + 'Your Password is ' + resetPasswordDecrypted + '\n \n Thanks for your service \n -Recovery Accounts.info'
 				HowtoRecover = input('You have to ways to recover your account \n1. You can answer a security question \n2. You can recieve an email containing your password \n: ')
 				if HowtoRecover == '1':
 					securityQuestion = input('What is the name of your first pet? ')
@@ -298,11 +299,19 @@ def Login():
 					print('You did not select an available option')
 					return "," ","
 				emailFound = True
+			else:
+				emailFound = False
+
 		elif reset == '2':
 			Login()
 		
-	else:
+	#Error handling for username not existsing
+	if emailFound == False:
+		print('The username you typed in does not exist.')
+		loggedin = False
 
+	else:
+		
 		#Password matches, log the user in, and print all the user's info
 		loggedin = True
 		age = user[3]
@@ -357,10 +366,7 @@ def Login():
 				return UsernameLogin, loggedin
 			else: 
 				print('Invalid option. Please try again:')	
-	#Error handling for username not existsing
-	if emailFound == False:
-		print('The username you typed in does not exist.')
-		loggedin = False			
+			
 	return UsernameLogin, loggedin
 
 

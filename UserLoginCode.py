@@ -2,19 +2,12 @@
 #Add medical info with link to how to solve the disease
 #Add I don't have a pet option
 #Add error check for the file selector if not an image
-#Add function for encrypting password
-#Add so if resetusername non existant
 """
 Main file
 """
 
 #import the needed packages
 import functions, smtplib, password, sqlite3, os.path, os
-
-#clear the screen
-os.system('clear')
-
-print('Loading...')
 
 #Set up the SQL database
 db = sqlite3.connect('User.db')
@@ -61,6 +54,6 @@ while not exit:
 			#Exit
 			os.system('clear')
 			exit = True
-	
+
 
 
