@@ -2,15 +2,18 @@
 Functions
 """
 import os.path, os
+
 #clear the screen
 os.system('clear')
 print('Loading...')
+
 #import the needed packages
 import smtplib, getpass, datetime, time, random, webbrowser, password, sqlite3, time
 from PIL import Image
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from twilio.rest import TwilioRestClient
+
 #Set up the Email server and check if it works
 try:
 	server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -21,7 +24,6 @@ try:
 except:
 	print('It seems something went wrong, please check your wifi connectivity and try again')
 	quit()
-
 
 
 def substitutionDecryption(resetPassword):
@@ -35,7 +37,6 @@ def substitutionDecryption(resetPassword):
 		index = key.find(ch)
 		resetPasswordDecrypted += alphabet[index]
 	return resetPasswordDecrypted
-
 
 
 def EncryptPassword(Password):
@@ -52,7 +53,6 @@ def EncryptPassword(Password):
 	return encryptedPassword
 
 
-
 def Register():
 	"""
 		The register function: 
@@ -67,7 +67,6 @@ def Register():
 	if goBack == '1':
 		os.system('clear')
 		return
-
 	else:
 		#Ask questions to setup account
 		Username = input('Create a Username: ')
@@ -125,7 +124,7 @@ def Register():
 			os.system('clear')
 			Register()
 		#Ask questions to setup account
-		petname = input('Please enter your first pet\'s name: ')
+		petname = input('Please enter your mom\'s name (This will be used as a security question): ')
 		bio = input('Bio:	(May not contain commas) Please tell us a little about yourself: ')
 		career = input('Enter the name of your company or the name of your school: ')
 		homeAddress = input('Please enter your home address: ')
@@ -232,7 +231,6 @@ def Register():
 				return
 
 
-
 def Login():
 	"""
 		The login function: 
@@ -287,7 +285,7 @@ def Login():
 				message = '\n\nRecovery account_info: \nHello ' + UsernameLogin + ',\n' + 'Your Password is ' + resetPasswordDecrypted + '\n \n Thanks for your service \n -Recovery Accounts.info'
 				HowtoRecover = input('You have to ways to recover your account \n1. You can answer a security question \n2. You can recieve an email containing your password \n: ')
 				if HowtoRecover == '1':
-					securityQuestion = input('What is the name of your first pet? ')
+					securityQuestion = input('Please enter your mom\'s name (This will be used as a security question): ')
 					if securityQuestion == securityQuestionAnswer:
 						print('You have successfully recovered your account, your password is ' + resetPasswordDecrypted)
 					else:
@@ -318,7 +316,6 @@ def Login():
 		#Password matches, log the user in, and print all the user's info
 		loggedin = True
 		age = user[3]
-		petname = user[4]
 		bio = user[5]
 		today = user[6]
 		filename = user[7]
@@ -329,7 +326,6 @@ def Login():
 		os.system('clear')
 		print('Welcome user ' + UsernameLogin + '!')
 		print('You are ' + age + ' years old.')
-		print('You\'re first pet\'s name is ' + petname + '.')
 		print('Bio: ' + bio)
 		if career != '':
 			print('The company you work for is: ' + career)
@@ -340,7 +336,6 @@ def Login():
 		profileDisplay = Image.open(str(filename))
 		profileDisplay.show()
 	return UsernameLogin, loggedin
-
 
 
 def LogOut(UsernameLogin):
