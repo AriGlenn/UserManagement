@@ -1,1 +1,4 @@
-Pillow==3.4.2
+Pillow==3.1.1
+SQLAlchemy==1.0.15
+tweepy==3.5.0
+twilio==5.6.0
