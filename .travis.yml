@@ -1,4 +1,8 @@
 language: python
 python: "2.7"
 install: "pip install -r requirements.txt"
+<<<<<<< HEAD
 script: "python password.py"
+=======
+script: "python UserLoginCode.py”
+>>>>>>> eeda7600a8bc26cd648add8c3a290284af7b8144
