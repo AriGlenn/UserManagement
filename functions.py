@@ -14,7 +14,6 @@ from twilio.rest import TwilioRestClient
 #Set up the Email server and check if it works
 try:
 	server = smtplib.SMTP('smtp.gmail.com', 587)
-	server = smtplib.SMTP('smtp.gmail.com', 587) #port 465 or 587
 	server.ehlo()
 	server.starttls()
 	server.ehlo()
