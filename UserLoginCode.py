@@ -2,7 +2,7 @@
 Main file
 """
 #import the needed packages
-import functions, smtplib, password.py, sqlite3, os.path, os
+import functions, sqlite3, os.path, os
 
 #Set up the SQL database
 db = sqlite3.connect('User.db')
