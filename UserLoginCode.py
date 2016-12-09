@@ -1,20 +1,6 @@
-<<<<<<< HEAD
-#Add I don't have a pet option
-#add bar to tell if the code works in read me (TRAVIS)
-#add erase reset password
 """
 Main file
 """
-=======
-#Add friends
-#Add medical info with link to how to solve the disease
-#Add I don't have a pet option
-#Add error check for the file selector if not an image
-"""
-Main file
-"""
-
->>>>>>> origin/master
 #import the needed packages
 import functions, smtplib, password, sqlite3, os.path, os
 
@@ -22,10 +8,6 @@ import functions, smtplib, password, sqlite3, os.path, os
 db = sqlite3.connect('User.db')
 cursor = db.cursor()
 cursor.execute('''CREATE TABLE if not exists users (username text primary key, password text, email text, age text, petname text, bio text, todayDate text, filename text, career text, gender text, homeAddress text)''')
-<<<<<<< HEAD
-=======
-cursor.execute('''CREATE TABLE if not exists friends (user text primary key, friendsList text, friendRequests text)''')
->>>>>>> origin/master
 db.commit()
 db.close()
 
@@ -65,11 +47,4 @@ while not exit:
 		elif selection == '3':
 			#Exit
 			os.system('clear')
-<<<<<<< HEAD
 			exit = True
-=======
-			exit = True
-
-
-
->>>>>>> origin/master
