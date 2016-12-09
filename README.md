@@ -1,5 +1,7 @@
 # User Management
 
+[![Build Status](https://travis-ci.com/AriGlenn/UserManagement.svg?token=MCcspB5soEVCtfp7xEqV&branch=master)](https://travis-ci.com/AriGlenn/UserManagement)
+
 ## How it works
 This program can register, login, and logout of any account. The accounts are stored and can be used after the program is closed and re-opened. The program has a recovery email, where if you forget your password or username, it will send you an email containg the information. This program stores your age, first pet's name, and much more.
 
