@@ -62,8 +62,13 @@ Once the user has logged in:
 ```python
 if loggedin == True:
 		print('Welcome user ' + UsernameLogin + '!')
-		print('You are ' + age + 'years old.')
-		print('You\'re first pet\'s name is ' + petname + '.')
+		print('You are ' + age + ' years old.')
+		print('Bio: ' + bio)
+		print('The company you work for is: ' + career)
+		print('Gender: ' + gender)
+		print('You live at: ' + homeAddress)
+		print('Account created on: ' + today)
+		print('Your profile photo is opening...\n')
 ```
 
 #### To make sure the password has been typed in correctly
