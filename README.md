@@ -12,7 +12,6 @@ This program can register, login, and logout of any account. The accounts are st
 db = sqlite3.connect('User.db')
 cursor = db.cursor()
 cursor.execute('''CREATE TABLE if not exists users (username text primary key, password text, email text, age text, petname text, bio text, todayDate text, filename text, career text, gender text, homeAddress text)''')
-cursor.execute('''CREATE TABLE if not exists friends (user text primary key, friendsList text, friendRequests text)''')
 db.commit()
 db.close()
 
