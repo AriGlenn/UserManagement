@@ -6,7 +6,7 @@ import os.path, os
 os.system('clear')
 print('Loading...')
 #import the needed packages
-import smtplib, getpass, datetime, time, random, webbrowser, password, sqlite3, time
+import smtplib, getpass, datetime, time, random, webbrowser, password, sqlite3
 from PIL import Image
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
@@ -388,10 +388,6 @@ def Login():
 		career = user[8]
 		gender = user[9]
 		homeAddress = user[10]
-		#Clear the screen
-		os.system('clear')
-		print('Welcome user ' + UsernameLogin + '!')
-		print('You are ' + age + ' years old.')
 		#Clear the screen
 		os.system('clear')
 		print('Welcome user ' + UsernameLogin + '!')
