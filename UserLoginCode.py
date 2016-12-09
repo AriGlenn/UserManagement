@@ -1,4 +1,3 @@
-#Travis
 #Send email later in code
 """
 Main file
